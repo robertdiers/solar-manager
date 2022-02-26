@@ -1,0 +1,6 @@
+* * * * * . $HOME/.profile; /app/solar-manager.sh > /proc/1/fd/1 2>/proc/1/fd/2
+* * * * * sleep 10; . $HOME/.profile; /app/solar-manager.sh > /proc/1/fd/1 2>/proc/1/fd/2
+* * * * * sleep 20; . $HOME/.profile; /app/solar-manager.sh > /proc/1/fd/1 2>/proc/1/fd/2
+* * * * * sleep 30; . $HOME/.profile; /app/solar-manager.sh > /proc/1/fd/1 2>/proc/1/fd/2
+* * * * * sleep 40; . $HOME/.profile; /app/solar-manager.sh > /proc/1/fd/1 2>/proc/1/fd/2
+* * * * * sleep 50; . $HOME/.profile; /app/solar-manager.sh > /proc/1/fd/1 2>/proc/1/fd/2
