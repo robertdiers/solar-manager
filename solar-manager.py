@@ -358,7 +358,7 @@ if __name__ == "__main__":
         inverterclient.close()
 
         # test values
-        surplus = -660
+        # surplus = -660
         
         # charger
         Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
