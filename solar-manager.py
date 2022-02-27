@@ -360,7 +360,7 @@ if __name__ == "__main__":
         # test values
         # surplus = -660
         
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + string(consumption_total) + ", generation: " + string(generation) + ", surplus: " + string(surplus) + ", powerToGrid: " + string(powerToGrid))   
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(consumption_total) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToGrid: " + str(powerToGrid))   
         
         # charger
         Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
