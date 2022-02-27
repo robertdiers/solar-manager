@@ -3,6 +3,9 @@
 combine Kostal, iDM, Soyosource and charger management
 
 
+docker run -d --device=/dev/ttyUSB0:/dev/ttyUSB0 robertdiers/solarmanager:arm
+
+
 ## TimescaleDB
 
 CREATE TABLE solar_kostal_battery ( "time" timestamptz NOT NULL , "value" double precision
