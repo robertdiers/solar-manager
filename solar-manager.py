@@ -356,6 +356,9 @@ if __name__ == "__main__":
         WriteTimescaleDb(conn, 'solar_kostal_powertogrid', powerToGrid)
         
         inverterclient.close()
+
+        # test values
+        surplus = -900
         
         # charger
         Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
