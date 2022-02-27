@@ -3,7 +3,7 @@
 combine Kostal, iDM, Soyosource and charger management
 
 
-docker run -d --device=/dev/ttyUSB0:/dev/ttyUSB0 robertdiers/solarmanager:arm
+docker run -d --device=/dev/ttyUSB0:/dev/ttyUSB0 --name solarmanager robertdiers/solarmanager:arm
 
 
 ## TimescaleDB
