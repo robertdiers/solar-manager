@@ -48,11 +48,11 @@ def SwitchTasmota(tasmotaip, status):
         if 'ON' in status and 'OFF' in StatusTasmota(tasmotaip):
             switchlink = urlopen('http://'+tasmotaip+'/?m=1&o=1')
             retval = switchlink.read().decode('utf-8')
-            print(datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ' ' + tasmotaip + ': ' + retval)
+            #print(datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ' ' + tasmotaip + ': ' + retval)
         if 'OFF' in status and 'ON' in StatusTasmota(tasmotaip):
             switchlink = urlopen('http://'+tasmotaip+'/?m=1&o=1')
             retval = switchlink.read().decode('utf-8')
-            print(datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ' ' + tasmotaip + ': ' + retval)
+            #print(datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ' ' + tasmotaip + ': ' + retval)
     except Exception as e:
         print (e)
 
@@ -201,7 +201,7 @@ def RS485(conn, rs485_device, surplus, numberOfUnits, maxOutput):
         print ("ERROR RS485: ", ex) 
 
 if __name__ == "__main__":  
-    print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
+    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:
         #read config
         config.read('solar-manager-defaults.ini')
@@ -267,20 +267,20 @@ if __name__ == "__main__":
             timescaledb_password = os.getenv('TIMESCALEDB_PASSWORD')
             print ("using env: TIMESCALEDB_PASSWORD")
 
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " inverter_ip: ", inverter_ip)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " inverter_port: ", inverter_port)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " idm_ip: ", idm_ip)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " idm_port: ", idm_port)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " feed_in_limit: ", feed_in_limit)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_ip: ", tasmota_charge_ip)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_start: ", tasmota_charge_start)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_end: ", tasmota_charge_end)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " rs485_device: ", rs485_device)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " numberOfUnits: ", numberOfUnits)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_ip: ", timescaledb_ip)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_username: ", timescaledb_username)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_password: ", timescaledb_password)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " inverter_ip: ", inverter_ip)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " inverter_port: ", inverter_port)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " idm_ip: ", idm_ip)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " idm_port: ", idm_port)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " feed_in_limit: ", feed_in_limit)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_ip: ", tasmota_charge_ip)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_start: ", tasmota_charge_start)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_end: ", tasmota_charge_end)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " rs485_device: ", rs485_device)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " numberOfUnits: ", numberOfUnits)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_ip: ", timescaledb_ip)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_username: ", timescaledb_username)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_password: ", timescaledb_password)
         
         #init Timescaledb if used
         if timescaledb_ip:
@@ -305,22 +305,22 @@ if __name__ == "__main__":
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption pv: ", consumptionpv)
         WriteTimescaleDb(conn, 'solar_kostal_consumption_pv', consumptionpv)
         consumption_total = consumptionbat + consumptiongrid + consumptionpv
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: ", consumption_total)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: ", consumption_total)
         WriteTimescaleDb(conn, 'solar_kostal_consumption_total', consumption_total)
 
         inverter = ReadFloat(inverterclient,172,71)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " inverter: ", inverter)   
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " inverter: ", inverter)   
         WriteTimescaleDb(conn, 'solar_kostal_inverter', inverter)
         
         batteryamp = ReadFloat(inverterclient,200,71)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (A): ", batteryamp)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (A): ", batteryamp)
         batteryvolt = ReadFloat(inverterclient,216,71)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (V): ", batteryvolt)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (V): ", batteryvolt)
         battery = round(batteryamp * batteryvolt, 2)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (W): ", battery)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (W): ", battery)
         WriteTimescaleDb(conn, 'solar_kostal_battery', battery)
         if batteryamp > 0.1:
-            print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery: discharge")
+            #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery: discharge")
             powerToGrid = -1
             WriteTimescaleDb(conn, 'solar_kostal_batteryflag', 1)
         elif batteryamp < -0.1:
@@ -328,7 +328,7 @@ if __name__ == "__main__":
         else:
             WriteTimescaleDb(conn, 'solar_kostal_batteryflag', 0)
         batterypercent = ReadFloat(inverterclient,210,71)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (%): ", batterypercent)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (%): ", batterypercent)
         WriteTimescaleDb(conn, 'solar_kostal_batterypercent', (batterypercent/100))
         
         #Kostal generation (by tracker/battery)
@@ -342,17 +342,17 @@ if __name__ == "__main__":
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " dc3: ", dc3)
         WriteTimescaleDb(conn, 'solar_kostal_generation_dc3', dc3)
         generation = round(dc1+dc2+dc3,2)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " generation: ", generation) 
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " generation: ", generation) 
         WriteTimescaleDb(conn, 'solar_kostal_generation_total', generation)
         
         #this is not exact, but enough for us
         surplus = round(generation - consumption_total,1)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: ", surplus)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: ", surplus)
         WriteTimescaleDb(conn, 'solar_kostal_surplus', surplus)
 
         #this is not exact, but enough for us
         powerToGrid = round(inverter - consumption_total,1)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " powerToGrid: ", powerToGrid)   
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " powerToGrid: ", powerToGrid)   
         WriteTimescaleDb(conn, 'solar_kostal_powertogrid', powerToGrid)
         
         inverterclient.close()
@@ -369,7 +369,7 @@ if __name__ == "__main__":
         # RS485 Soyosource
         RS485(conn, rs485_device, surplus, float(numberOfUnits), float(maxOutput))
 
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         
     except Exception as ex:
         print ("ERROR: ", ex) 
