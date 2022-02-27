@@ -7,10 +7,10 @@ RUN apt -y install cron python3 python3-pip libpq-dev python3-dev
 RUN pip3 install configparser pymodbus psycopg2
 
 # copy files
-COPY tasmotacharger.py /app/solar-manager.py
-COPY tasmotacharger.ini /app/solar-manager.ini
-COPY tasmotachargerdefaults.ini /app/solar-manager-defaults.ini
-COPY tasmotacharger.sh /app/solar-manager.sh
+COPY solar-manager.py /app/solar-manager.py
+COPY solar-manager.ini /app/solar-manager.ini
+COPY solar-manager-defaults.ini /app/solar-manager-defaults.ini
+COPY solar-manager.sh /app/solar-manager.sh
 COPY entrypoint.sh /app/entrypoint.sh
 COPY container_cron /etc/cron.d/container_cron
 

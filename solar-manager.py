@@ -155,19 +155,19 @@ def createPacket(demand, byte4, byte5, byte7):
     return byte4, byte5, byte7
 
 # Soyosource write to RS-485
-def writeToSerial(packet, serialWrite):
+def writeToSerial(packet, serialWrite, byte0, byte1, byte2, byte3, byte6):
     try:
         packet = [byte0,byte1,byte2,byte3,packet[0],packet[1],byte6,packet[2]]
         serialWrite.write(bytearray(packet))
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " complete decimal packet: s%", packet)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " raw bytearray packet being sent to serial: %s", bytearray(packet))
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " checksum calc= %s", 264-packet[0]-packet[1])
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " complete decimal packet: s%", packet)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " raw bytearray packet being sent to serial: %s", bytearray(packet))
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " checksum calc= %s", 264-packet[0]-packet[1])
     except Exception as ex:
         print ("ERROR writeToSerial: ", ex)
     return packet
 
 # idm heat pump
-def RS485(conn, rs485_device, surplus):
+def RS485(conn, rs485_device, surplus, numberOfUnits, maxOutput):
     try:
         ## CREATE GLOBALS
         byte0 = 36
@@ -179,22 +179,22 @@ def RS485(conn, rs485_device, surplus):
         byte6 = 128
         byte7 = 8 ## checksum
         packet = [byte0,byte1,byte2,byte3,byte4,byte5,byte6,byte7]
-        numberOfUnits = 3 # number of inverters in your system
-        maxOutput = 2700 # edit this to limit TOTAL power output in watts (not individual unit output)
-        serialWrite = serial.Serial('ttyUSB0', 4800, timeout=1) # define serial port on which to output RS485 data
-        #serialWrite = serial.Serial(rs485_device, 4800, timeout=1) # define serial port on which to output RS485 data
+        serialWrite = serial.Serial(rs485_device, 4800, timeout=1) # define serial port on which to output RS485 data
 
         # above zero means generation > consumption
         if (surplus > 0):
             surplus = 0
-        surpuls = -surplus
+        surplus = -surplus
 
-        # we can send the packet
-        demand =computeDemand(surpuls, maxOutput, buffer, numberOfUnits)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
+        # we can calculate the demand
+        demand = computeDemand(surplus, maxOutput, numberOfUnits)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
+        WriteTimescaleDb(conn, 'solar_soyosource', demand)
+
+        # prepare packet and send        
         simulatedPacket = createPacket(demand, byte4, byte5, byte7)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 simulatedPacket: ", simulatedPacket)
-        writeToSerial(simulatedPacket, serialWrite)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 simulatedPacket: ", simulatedPacket)
+        writeToSerial(simulatedPacket, serialWrite, byte0, byte1, byte2, byte3, byte6)
 
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485: ", demand)
     except Exception as ex:
@@ -217,6 +217,8 @@ if __name__ == "__main__":
         tasmota_charge_start = config['ChargerSection']['tasmota_charge_start']  
         tasmota_charge_end = config['ChargerSection']['tasmota_charge_end']  
         rs485_device = config['RS485Section']['rs485_device']  
+        numberOfUnits = config['RS485Section']['numberOfUnits']  
+        maxOutput = config['RS485Section']['maxOutput']  
         timescaledb_ip = config['MetricSection']['timescaledb_ip']
         timescaledb_username = config['MetricSection']['timescaledb_username']
         timescaledb_password = config['MetricSection']['timescaledb_password']
@@ -249,6 +251,12 @@ if __name__ == "__main__":
         if os.getenv('RS485_DEVICE','None') != 'None':
             rs485_device = os.getenv('RS485_DEVICE')
             print ("using env: RS485_DEVICE")
+        if os.getenv('NUMBEROFUNITS','None') != 'None':
+            numberOfUnits = os.getenv('NUMBEROFUNITS')
+            print ("using env: NUMBEROFUNITS")
+        if os.getenv('MAXOUTPUT','None') != 'None':
+            maxOutput = os.getenv('MAXOUTPUT')
+            print ("using env: MAXOUTPUT")
         if os.getenv('TIMESCALEDB_IP','None') != 'None':
             timescaledb_ip = os.getenv('TIMESCALEDB_IP')
             print ("using env: TIMESCALEDB_IP")
@@ -268,6 +276,8 @@ if __name__ == "__main__":
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_start: ", tasmota_charge_start)
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_end: ", tasmota_charge_end)
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " rs485_device: ", rs485_device)
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " numberOfUnits: ", numberOfUnits)
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_ip: ", timescaledb_ip)
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_username: ", timescaledb_username)
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_password: ", timescaledb_password)
@@ -354,7 +364,7 @@ if __name__ == "__main__":
         Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port)
 
         # RS485 Soyosource
-        RS485(conn, rs485_device, surplus)
+        RS485(conn, rs485_device, surplus, float(numberOfUnits), float(maxOutput))
 
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         
