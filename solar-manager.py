@@ -75,10 +75,10 @@ def Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_char
         #charging
         chargestatus = StatusTasmota(tasmota_charge_ip)
         if 'ON' in chargestatus:
-            print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger chargestatus: ", 'ON')
+            print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger: ", 'ON')
             WriteTimescaleDb(conn, 'solar_battery_chargestatus', 1)
         if 'OFF' in chargestatus:
-            print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger chargestatus: ", 'OFF')
+            print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger: ", 'OFF')
             WriteTimescaleDb(conn, 'solar_battery_chargestatus', 0)
 
         #we will always charge between 12:00 and 12:05 to ensure a kind of "battery protect"
