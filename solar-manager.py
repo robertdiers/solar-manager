@@ -79,7 +79,7 @@ def ReadTimescaleDb(conn, table):
         sql = 'SELECT value FROM '+table+' where time = (select max(time) from '+table+')'
         cur.execute(sql)  
         row = cur.fetchone()
-        value = row(0)
+        value = row[0]
         # commit the changes to the database
         conn.commit()
         # close the communication with the PostgreSQL
