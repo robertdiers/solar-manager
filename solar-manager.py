@@ -206,6 +206,7 @@ def RS485(conn, rs485_device, surplus, numberOfUnits, maxOutput):
 
         # we can calculate the demand
         actualval = ReadTimescaleDb(conn, 'solar_soyosource')
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 actualval: ", actualval)
         demand = computeDemand(surplus, maxOutput, numberOfUnits, actualval)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
         WriteTimescaleDb(conn, 'solar_soyosource', demand)
