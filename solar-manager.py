@@ -5,6 +5,7 @@ import configparser
 import os
 import psycopg2
 import serial
+import sys
 from datetime import datetime
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
@@ -69,6 +70,24 @@ def WriteTimescaleDb(conn, table, value):
         # close the communication with the PostgreSQL
         cur.close()
 
+# write metric to TimescaleDB
+def ReadTimescaleDb(conn, table):
+    if conn:
+        # create a cursor
+        cur = conn.cursor()   
+        # execute a statement
+        sql = 'SELECT value FROM '+table+' where time = (select max(time) from '+table+')'
+        cur.execute(sql)  
+        row = cur.fetchone()
+        value = row(0)
+        # commit the changes to the database
+        conn.commit()
+        # close the communication with the PostgreSQL
+        cur.close()
+        return value
+    else:
+        return 0
+
 # charger
 def Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end):
     try:
@@ -128,7 +147,8 @@ def Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port):
         print ("ERROR Idm: ", ex) 
 
 # Soyosource demand calculation
-def computeDemand(sourceValue, maxOutput, numberOfUnits):
+def computeDemand(change, maxOutput, numberOfUnits, actualval):
+    sourceValue = actualval + change
     if sourceValue > maxOutput: #if demand is higher than our max
         demand = maxOutput/numberOfUnits
         return int(demand) # s
@@ -182,12 +202,11 @@ def RS485(conn, rs485_device, surplus, numberOfUnits, maxOutput):
         serialWrite = serial.Serial(rs485_device, 4800, timeout=1) # define serial port on which to output RS485 data
 
         # above zero means generation > consumption
-        if (surplus > 0):
-            surplus = 0
         surplus = -surplus
 
         # we can calculate the demand
-        demand = computeDemand(surplus, maxOutput, numberOfUnits)
+        actualval = ReadTimescaleDb(conn, 'solar_soyosource')
+        demand = computeDemand(surplus, maxOutput, numberOfUnits, actualval)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
         WriteTimescaleDb(conn, 'solar_soyosource', demand)
 
