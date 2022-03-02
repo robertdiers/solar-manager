@@ -41,10 +41,10 @@ def computeDemand(sourceValue, maxOutput, numberOfUnits):
     if sourceValue > maxOutput: #if demand is higher than our max
         demand = maxOutput/numberOfUnits
         return int(demand) # s
-    elif sourceValue >= (60*numberOfUnits): # if demand is above min 60 watts but less than max
+    elif sourceValue > 0: # if demand is above 0 but less than max
         demand = sourceValue/numberOfUnits # this is to split the demand
         return int(demand) 
-    elif sourceValue < (60*numberOfUnits): # if exporting or below min lets reduce the output to zero
+    elif sourceValue <= 0: # if exporting lets reduce the output to zero
         demand = 0
         return int(demand) # only demand is required but value is for logs
     else:
