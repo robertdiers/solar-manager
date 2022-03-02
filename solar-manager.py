@@ -90,18 +90,23 @@ def IncreaseTimescaleDb(conn, table, value, maxOutput):
     conn.commit()
     # close the communication with the PostgreSQL
     cur.close()
+    return valuenew
 
 # charger
 def Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end):
     try:
+        retval = 'ON'
+
         #charging
         chargestatus = StatusTasmota(tasmota_charge_ip)
         if 'ON' in chargestatus:
-            print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger: ", 'ON')
+            #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger: ", 'ON')
             WriteTimescaleDb(conn, 'solar_battery_chargestatus', 1)
+            retval = 'ON'
         if 'OFF' in chargestatus:
-            print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger: ", 'OFF')
+            #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger: ", 'OFF')
             WriteTimescaleDb(conn, 'solar_battery_chargestatus', 0)
+            retval = 'OFF'
 
         #we will always charge between 12:00 and 12:05 to ensure a kind of "battery protect"
         now = datetime.now()
@@ -110,15 +115,20 @@ def Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_char
                 SwitchTasmota(tasmota_charge_ip, 'ON')
                 print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger start charging battery protect: ", surplus)
                 WriteTimescaleDb(conn, 'solar_battery_chargestatus', 1)
+                retval = 'ON'
         else:
             if 'OFF' in chargestatus and surplus > int(tasmota_charge_start):
                 SwitchTasmota(tasmota_charge_ip, 'ON')
                 print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger start charging: ", surplus)
                 WriteTimescaleDb(conn, 'solar_battery_chargestatus', 1)
+                retval = 'ON'
             if 'ON' in chargestatus and surplus < int(tasmota_charge_end):
                 SwitchTasmota(tasmota_charge_ip, 'OFF')
                 print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " Charger stop charging: ", surplus)
                 WriteTimescaleDb(conn, 'solar_battery_chargestatus', 0)   
+                retval = 'OFF'
+        
+        return retval
     except Exception as ex:
         print ("ERROR Charger: ", ex)  
 
@@ -143,9 +153,10 @@ def Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port):
             
         #read from iDM
         idmvalue = ReadFloat(idmclient,74,1)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " iDM: ", idmvalue)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " iDM: ", idmvalue)
             
-        idmclient.close()   
+        idmclient.close()  
+        return idmvalue
     except Exception as ex:
         print ("ERROR Idm: ", ex) 
 
@@ -301,13 +312,15 @@ if __name__ == "__main__":
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(consumption_total) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToGrid: " + str(powerToGrid))   
         
         # charger
-        Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
+        chargerval = Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
         
         # idm
-        Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port)
+        idmval = Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port)
 
         # Soyosource
-        IncreaseTimescaleDb(conn, 'soyosource', -surplus, maxOutput)
+        soyoval = IncreaseTimescaleDb(conn, 'soyosource', -surplus, float(maxOutput))
+
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + (soyoval))  
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         
