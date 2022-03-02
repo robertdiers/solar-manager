@@ -320,7 +320,7 @@ if __name__ == "__main__":
         # Soyosource
         soyoval = IncreaseTimescaleDb(conn, 'soyosource', -surplus, float(maxOutput))
 
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + (soyoval))  
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(soyoval))  
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         

@@ -92,9 +92,9 @@ def RS485(conn, rs485_device, numberOfUnits, maxOutput):
 
         # we will send the demand from Timescaledb
         tsdbval = ReadTimescaleDb(conn, 'soyosource')
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
         demand = computeDemand(tsdbval, maxOutput, numberOfUnits)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
         WriteTimescaleDb(conn, 'solar_soyosource', demand)
 
         # prepare packet and send        
