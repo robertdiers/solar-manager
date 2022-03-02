@@ -309,7 +309,7 @@ if __name__ == "__main__":
         
         inverterclient.close()
         
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(consumption_total) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToGrid: " + str(powerToGrid))   
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(round(consumption_total,2)) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToGrid: " + str(powerToGrid))   
         
         # charger
         chargerval = Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
@@ -320,7 +320,7 @@ if __name__ == "__main__":
         # Soyosource
         soyoval = IncreaseTimescaleDb(conn, 'soyosource', -surplus, float(maxOutput))
 
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(soyoval))  
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         
