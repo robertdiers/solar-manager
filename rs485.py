@@ -98,7 +98,9 @@ def RS485(conn, rs485_device, numberOfUnits, maxOutput):
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
         demand = computeDemand(tsdbval, maxOutput, numberOfUnits)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
-        if int(actualsec) >= 2 and int(actualsec) < 4:
+        if int(actualsec) >= 4 and int(actualsec) < 6:
+            WriteTimescaleDb(conn, 'solar_soyosource', demand)
+        if int(actualsec) >= 34 and int(actualsec) < 36:
             WriteTimescaleDb(conn, 'solar_soyosource', demand)
 
         # prepare packet and send        
