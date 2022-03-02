@@ -67,6 +67,30 @@ def WriteTimescaleDb(conn, table, value):
     # close the communication with the PostgreSQL
     cur.close()
 
+# increase value in TimescaleDB
+def IncreaseTimescaleDb(conn, table, value, maxOutput):
+    # create a cursor
+    cur = conn.cursor()   
+    # execute a statement
+    sql = 'SELECT value FROM '+table
+    cur.execute(sql)  
+    row = cur.fetchone()
+    valueold = row[0]
+    # calculation
+    valuenew = valueold + value
+    # max/min check 
+    if maxOutput < valuenew:
+        valuenew = maxOutput
+    if 0 > valuenew:
+        valuenew = 0
+    # execute a statement
+    sql = 'update '+table+' set value = %s'
+    cur.execute(sql, (valuenew,))
+    # commit the changes to the database
+    conn.commit()
+    # close the communication with the PostgreSQL
+    cur.close()
+
 # charger
 def Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end):
     try:
@@ -140,6 +164,7 @@ if __name__ == "__main__":
         tasmota_charge_ip = config['ChargerSection']['tasmota_charge_ip']
         tasmota_charge_start = config['ChargerSection']['tasmota_charge_start']  
         tasmota_charge_end = config['ChargerSection']['tasmota_charge_end']  
+        maxOutput = config['RS485Section']['maxOutput']
         timescaledb_ip = config['MetricSection']['timescaledb_ip']
         timescaledb_username = config['MetricSection']['timescaledb_username']
         timescaledb_password = config['MetricSection']['timescaledb_password']
@@ -169,6 +194,9 @@ if __name__ == "__main__":
         if os.getenv('TASMOTA_CHARGE_END','None') != 'None':
             tasmota_charge_end = os.getenv('TASMOTA_CHARGE_END')
             print ("using env: TASMOTA_CHARGE_END")
+        if os.getenv('MAXOUTPUT','None') != 'None':
+            maxOutput = os.getenv('MAXOUTPUT')
+            print ("using env: MAXOUTPUT")
         if os.getenv('TIMESCALEDB_IP','None') != 'None':
             timescaledb_ip = os.getenv('TIMESCALEDB_IP')
             print ("using env: TIMESCALEDB_IP")
@@ -187,6 +215,7 @@ if __name__ == "__main__":
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_ip: ", tasmota_charge_ip)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_start: ", tasmota_charge_start)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_end: ", tasmota_charge_end)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_ip: ", timescaledb_ip)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_username: ", timescaledb_username)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_password: ", timescaledb_password)
@@ -276,6 +305,9 @@ if __name__ == "__main__":
         
         # idm
         Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port)
+
+        # Soyosource
+        IncreaseTimescaleDb(conn, 'soyosource', -surplus, maxOutput)
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         

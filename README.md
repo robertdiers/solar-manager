@@ -8,6 +8,12 @@ docker run -d --device=/dev/ttyUSB0:/dev/ttyUSB0 --name solarmanager robertdiers
 
 ## TimescaleDB
 
+CREATE TABLE soyosource ( 
+	"value"              double precision    
+);
+
+Insert into soyosource (value) values (0);
+
 CREATE TABLE solar_kostal_battery ( "time" timestamptz NOT NULL , "value" double precision
 );
 

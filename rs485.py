@@ -26,7 +26,7 @@ def ReadTimescaleDb(conn, table):
     # create a cursor
     cur = conn.cursor()   
     # execute a statement
-    sql = 'SELECT value FROM '+table+' where time = (select max(time) from '+table+')'
+    sql = 'SELECT value FROM '+table
     cur.execute(sql)  
     row = cur.fetchone()
     value = row[0]
@@ -91,10 +91,10 @@ def RS485(conn, rs485_device, numberOfUnits, maxOutput):
         serialWrite = serial.Serial(rs485_device, 4800, timeout=1) # define serial port on which to output RS485 data
 
         # we will send the demand from Timescaledb
-        tsdbval = 0 - ReadTimescaleDb(conn, 'solar_kostal_surplus')
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
+        tsdbval = ReadTimescaleDb(conn, 'soyosource')
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
         demand = computeDemand(tsdbval, maxOutput, numberOfUnits)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
         WriteTimescaleDb(conn, 'solar_soyosource', demand)
 
         # prepare packet and send        
@@ -102,7 +102,7 @@ def RS485(conn, rs485_device, numberOfUnits, maxOutput):
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 simulatedPacket: ", simulatedPacket)
         writeToSerial(simulatedPacket, serialWrite, byte0, byte1, byte2, byte3, byte6)
 
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485: ", demand)
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485: ", demand)
     except Exception as ex:
         print ("ERROR RS485: ", ex) 
 
