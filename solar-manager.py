@@ -257,7 +257,7 @@ if __name__ == "__main__":
         surplus = round(generation - consumption_total,1)
 
         # test values
-        surplus = -690
+        #surplus = -690
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: ", surplus)
         WriteTimescaleDb(conn, 'solar_kostal_surplus', surplus)

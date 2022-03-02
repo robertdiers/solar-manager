@@ -92,9 +92,9 @@ def RS485(conn, rs485_device, numberOfUnits, maxOutput):
 
         # we will send the demand from Timescaledb
         tsdbval = 0 - ReadTimescaleDb(conn, 'solar_kostal_surplus')
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
         demand = computeDemand(tsdbval, maxOutput, numberOfUnits)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
         WriteTimescaleDb(conn, 'solar_soyosource', demand)
 
         # prepare packet and send        
@@ -102,7 +102,7 @@ def RS485(conn, rs485_device, numberOfUnits, maxOutput):
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 simulatedPacket: ", simulatedPacket)
         writeToSerial(simulatedPacket, serialWrite, byte0, byte1, byte2, byte3, byte6)
 
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485: ", demand)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485: ", demand)
     except Exception as ex:
         print ("ERROR RS485: ", ex) 
 
