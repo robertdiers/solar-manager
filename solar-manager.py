@@ -4,8 +4,6 @@ import pymodbus
 import configparser
 import os
 import psycopg2
-import serial
-import sys
 from datetime import datetime
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
@@ -59,34 +57,15 @@ def SwitchTasmota(tasmotaip, status):
 
 # write metric to TimescaleDB
 def WriteTimescaleDb(conn, table, value):
-    if conn:
-        # create a cursor
-        cur = conn.cursor()   
-        # execute a statement
-        sql = 'insert into '+table+' (time, value) values (now(), %s)'
-        cur.execute(sql, (value,))   
-        # commit the changes to the database
-        conn.commit()
-        # close the communication with the PostgreSQL
-        cur.close()
-
-# write metric to TimescaleDB
-def ReadTimescaleDb(conn, table):
-    if conn:
-        # create a cursor
-        cur = conn.cursor()   
-        # execute a statement
-        sql = 'SELECT value FROM '+table+' where time = (select max(time) from '+table+')'
-        cur.execute(sql)  
-        row = cur.fetchone()
-        value = row[0]
-        # commit the changes to the database
-        conn.commit()
-        # close the communication with the PostgreSQL
-        cur.close()
-        return value
-    else:
-        return 0
+    # create a cursor
+    cur = conn.cursor()   
+    # execute a statement
+    sql = 'insert into '+table+' (time, value) values (now(), %s)'
+    cur.execute(sql, (value,))   
+    # commit the changes to the database
+    conn.commit()
+    # close the communication with the PostgreSQL
+    cur.close()
 
 # charger
 def Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end):
@@ -146,85 +125,10 @@ def Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port):
     except Exception as ex:
         print ("ERROR Idm: ", ex) 
 
-# Soyosource demand calculation
-def computeDemand(change, maxOutput, numberOfUnits, actualval):
-    sourceValue = actualval + change
-    if sourceValue > maxOutput: #if demand is higher than our max
-        demand = maxOutput/numberOfUnits
-        return int(demand) # s
-    elif sourceValue >= (60*numberOfUnits): # if demand is above min 60 watts but less than max
-        demand = sourceValue/numberOfUnits # this is to split the demand
-        return int(demand) 
-    elif sourceValue < (60*numberOfUnits): # if exporting or below min lets reduce the output to zero
-        demand = 0
-        return int(demand) # only demand is required but value is for logs
-    else:
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " computeDemand invalid source value: ", sourceValue)
-
-# Soyosource packet creation
-def createPacket(demand, byte4, byte5, byte7):
-    byte4 = int(demand/256) ## (2 byte watts as short integer xaxb)
-    if byte4 < 0 or byte4 > 256:
-        byte4 = 0
-    byte5 = int(demand)-(byte4 * 256) ## (2 byte watts as short integer xaxb)
-    if byte5 < 0 or byte5 > 256:
-        byte5 = 0
-    byte7 = (264 - byte4 - byte5) #checksum calculation
-    if byte7 > 256:
-        byte7 = 8
-    return byte4, byte5, byte7
-
-# Soyosource write to RS-485
-def writeToSerial(packet, serialWrite, byte0, byte1, byte2, byte3, byte6):
-    try:
-        packet = [byte0,byte1,byte2,byte3,packet[0],packet[1],byte6,packet[2]]
-        serialWrite.write(bytearray(packet))
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " complete decimal packet: s%", packet)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " raw bytearray packet being sent to serial: %s", bytearray(packet))
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " checksum calc= %s", 264-packet[0]-packet[1])
-    except Exception as ex:
-        print ("ERROR writeToSerial: ", ex)
-    return packet
-
-# idm heat pump
-def RS485(conn, rs485_device, surplus, numberOfUnits, maxOutput):
-    try:
-        ## CREATE GLOBALS
-        byte0 = 36
-        byte1 = 86
-        byte2 = 0
-        byte3 = 33
-        byte4 = 0 ##(2 byte watts as short integer xaxb)
-        byte5 = 0 ##(2 byte watts as short integer xaxb)
-        byte6 = 128
-        byte7 = 8 ## checksum
-        packet = [byte0,byte1,byte2,byte3,byte4,byte5,byte6,byte7]
-        serialWrite = serial.Serial(rs485_device, 4800, timeout=1) # define serial port on which to output RS485 data
-
-        # above zero means generation > consumption
-        surplus = -surplus
-
-        # we can calculate the demand
-        actualval = ReadTimescaleDb(conn, 'solar_soyosource')
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 actualval: ", actualval)
-        demand = computeDemand(surplus, maxOutput, numberOfUnits, actualval)
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
-        WriteTimescaleDb(conn, 'solar_soyosource', demand)
-
-        # prepare packet and send        
-        simulatedPacket = createPacket(demand, byte4, byte5, byte7)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 simulatedPacket: ", simulatedPacket)
-        writeToSerial(simulatedPacket, serialWrite, byte0, byte1, byte2, byte3, byte6)
-
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485: ", demand)
-    except Exception as ex:
-        print ("ERROR RS485: ", ex) 
-
 if __name__ == "__main__":  
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:
         #read config
-        config.read('solar-manager-defaults.ini')
         config.read('solar-manager.ini')
 
         #read config and default values
@@ -236,9 +140,6 @@ if __name__ == "__main__":
         tasmota_charge_ip = config['ChargerSection']['tasmota_charge_ip']
         tasmota_charge_start = config['ChargerSection']['tasmota_charge_start']  
         tasmota_charge_end = config['ChargerSection']['tasmota_charge_end']  
-        rs485_device = config['RS485Section']['rs485_device']  
-        numberOfUnits = config['RS485Section']['numberOfUnits']  
-        maxOutput = config['RS485Section']['maxOutput']  
         timescaledb_ip = config['MetricSection']['timescaledb_ip']
         timescaledb_username = config['MetricSection']['timescaledb_username']
         timescaledb_password = config['MetricSection']['timescaledb_password']
@@ -268,15 +169,6 @@ if __name__ == "__main__":
         if os.getenv('TASMOTA_CHARGE_END','None') != 'None':
             tasmota_charge_end = os.getenv('TASMOTA_CHARGE_END')
             print ("using env: TASMOTA_CHARGE_END")
-        if os.getenv('RS485_DEVICE','None') != 'None':
-            rs485_device = os.getenv('RS485_DEVICE')
-            print ("using env: RS485_DEVICE")
-        if os.getenv('NUMBEROFUNITS','None') != 'None':
-            numberOfUnits = os.getenv('NUMBEROFUNITS')
-            print ("using env: NUMBEROFUNITS")
-        if os.getenv('MAXOUTPUT','None') != 'None':
-            maxOutput = os.getenv('MAXOUTPUT')
-            print ("using env: MAXOUTPUT")
         if os.getenv('TIMESCALEDB_IP','None') != 'None':
             timescaledb_ip = os.getenv('TIMESCALEDB_IP')
             print ("using env: TIMESCALEDB_IP")
@@ -295,20 +187,16 @@ if __name__ == "__main__":
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_ip: ", tasmota_charge_ip)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_start: ", tasmota_charge_start)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " tasmota_charge_end: ", tasmota_charge_end)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " rs485_device: ", rs485_device)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " numberOfUnits: ", numberOfUnits)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_ip: ", timescaledb_ip)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_username: ", timescaledb_username)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_password: ", timescaledb_password)
         
-        #init Timescaledb if used
-        if timescaledb_ip:
-            conn = psycopg2.connect(
-                host=timescaledb_ip,
-                database="postgres",
-                user=timescaledb_username,
-                password=timescaledb_password)
+        #init Timescaledb
+        conn = psycopg2.connect(
+            host=timescaledb_ip,
+            database="postgres",
+            user=timescaledb_username,
+            password=timescaledb_password)
 
         #connection Kostal
         inverterclient = ModbusTcpClient(inverter_ip,port=inverter_port)            
@@ -367,6 +255,10 @@ if __name__ == "__main__":
         
         #this is not exact, but enough for us
         surplus = round(generation - consumption_total,1)
+
+        # test values
+        # surplus = -660
+
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: ", surplus)
         WriteTimescaleDb(conn, 'solar_kostal_surplus', surplus)
 
@@ -376,9 +268,6 @@ if __name__ == "__main__":
         WriteTimescaleDb(conn, 'solar_kostal_powertogrid', powerToGrid)
         
         inverterclient.close()
-
-        # test values
-        # surplus = -660
         
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(consumption_total) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToGrid: " + str(powerToGrid))   
         
@@ -387,9 +276,6 @@ if __name__ == "__main__":
         
         # idm
         Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port)
-
-        # RS485 Soyosource
-        RS485(conn, rs485_device, surplus, float(numberOfUnits), float(maxOutput))
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         
