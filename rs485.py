@@ -78,6 +78,9 @@ def writeToSerial(packet, serialWrite, byte0, byte1, byte2, byte3, byte6):
 # idm heat pump
 def RS485(conn, rs485_device, numberOfUnits, maxOutput):
     try:
+        actualsec = datetime.now().strftime("%S")
+        #print ('###' + actualsec)
+
         ## CREATE GLOBALS
         byte0 = 36
         byte1 = 86
@@ -95,7 +98,8 @@ def RS485(conn, rs485_device, numberOfUnits, maxOutput):
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
         demand = computeDemand(tsdbval, maxOutput, numberOfUnits)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
-        WriteTimescaleDb(conn, 'solar_soyosource', demand)
+        if int(actualsec) >= 2 and int(actualsec) < 4:
+            WriteTimescaleDb(conn, 'solar_soyosource', demand)
 
         # prepare packet and send        
         simulatedPacket = createPacket(demand, byte4, byte5, byte7)
