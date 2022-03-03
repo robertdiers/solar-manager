@@ -305,7 +305,7 @@ if __name__ == "__main__":
         #this is not exact, but enough for us, wrong for negative consumption
         #surplus = round(generation - consumption_total,1)
         # if we send power to battery or grid
-        surplus = powerToBattery + powerToGrid
+        surplus = round(powerToBattery + powerToGrid, 2)
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: ", surplus)
         WriteTimescaleDb(conn, 'solar_kostal_surplus', surplus)
