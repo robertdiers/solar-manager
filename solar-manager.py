@@ -266,15 +266,15 @@ if __name__ == "__main__":
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (A): ", batteryamp)
         batteryvolt = ReadFloat(inverterclient,216,71)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (V): ", batteryvolt)
-        battery = round(batteryamp * batteryvolt, 2)
+        powerToBattery = -round(batteryamp * batteryvolt, 2)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (W): ", battery)
         #WriteTimescaleDb(conn, 'solar_kostal_battery', battery)
         if batteryamp > 0.1:
             #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery: discharge")
-            powerToGrid = -1
-            WriteTimescaleDb(conn, 'solar_kostal_batteryflag', 1)
-        elif batteryamp < -0.1:
             WriteTimescaleDb(conn, 'solar_kostal_batteryflag', -1)
+        elif batteryamp < -0.1:
+            #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery: charge")
+            WriteTimescaleDb(conn, 'solar_kostal_batteryflag', 1)
         else:
             WriteTimescaleDb(conn, 'solar_kostal_batteryflag', 0)
         batterypercent = ReadFloat(inverterclient,210,71)
@@ -305,14 +305,14 @@ if __name__ == "__main__":
         #this is not exact, but enough for us, wrong for negative consumption
         #surplus = round(generation - consumption_total,1)
         # if we send power to battery or grid
-        surplus = (-battery) + powerToGrid
+        surplus = powerToBattery + powerToGrid
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: ", surplus)
         WriteTimescaleDb(conn, 'solar_kostal_surplus', surplus)
         
         inverterclient.close()
         
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(round(consumption_total,2)) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToGrid: " + str(powerToGrid))   
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(round(consumption_total,2)) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToBattery: " + str(powerToBattery) + ", powerToGrid: " + str(powerToGrid))   
         
         # charger
         chargerval = Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
