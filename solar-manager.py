@@ -252,6 +252,8 @@ if __name__ == "__main__":
         consumptionpv = ReadFloat(inverterclient,116,71)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption pv: ", consumptionpv)
         #WriteTimescaleDb(conn, 'solar_kostal_consumption_pv', consumptionpv)
+
+        #CONSUMPTION WILL NOT GET NEGATIVE!
         consumption_total = consumptionbat + consumptiongrid + consumptionpv
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: ", consumption_total)
         WriteTimescaleDb(conn, 'solar_kostal_consumption_total', consumption_total)
@@ -293,34 +295,35 @@ if __name__ == "__main__":
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " generation: ", generation) 
         WriteTimescaleDb(conn, 'solar_kostal_generation_total', generation)
         
-        #this is not exact, but enough for us
+        #this is not exact, but enough for us, wrong for negative consumption
         surplus = round(generation - consumption_total,1)
-
-        # test values
-        #surplus = -690
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: ", surplus)
         WriteTimescaleDb(conn, 'solar_kostal_surplus', surplus)
 
         #this is not exact, but enough for us
-        powerToGrid = round(inverter - consumption_total,1)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " powerToGrid: ", powerToGrid)   
+        #powerToGrid = round(inverter - consumption_total,1)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " powerToGrid: ", powerToGrid)  
+        powerToGrid = -ReadFloat(inverterclient,252,71)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " powerToGrid: ", powerToGrid)  
         WriteTimescaleDb(conn, 'solar_kostal_powertogrid', powerToGrid)
         
         inverterclient.close()
         
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(round(consumption_total,2)) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToGrid: " + str(powerToGrid))   
         
-        # charger
+        # charger, we can use surplus because negative consumption will also have a high Kostal generation
         chargerval = Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
         
         # idm
         idmval = Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port)
 
         # Soyosource
-        soyoval = IncreaseTimescaleDb(conn, 'soyosource', -surplus, float(maxOutput))
+        #we need to increase production if we use power from grid or battery
+        soyodiff = battery + (-powerToGrid)
+        soyoval = IncreaseTimescaleDb(conn, 'soyosource', soyodiff, float(maxOutput))
 
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyodiff: " + str(round(soyodiff,2)) + ", soyosource: " + str(round(soyoval,2)))  
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         
