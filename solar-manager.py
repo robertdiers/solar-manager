@@ -321,6 +321,9 @@ if __name__ == "__main__":
         idmval = Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port)
 
         # soyosource
+        now = datetime.now()
+        if now.hour == 12 and now.minute < 5:
+            surplus = 10000
         soyoval = IncreaseTimescaleDb(conn, 'soyosource', -surplus, float(maxOutput))
 
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
