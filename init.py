@@ -11,17 +11,20 @@ config = configparser.ConfigParser()
 
 # write metric to TimescaleDB
 def ExecTimescaleDb(conn, sql):
-    # create a cursor
-    cur = conn.cursor()   
-    # execute a statement
-    cur.execute(sql)  
-    # commit the changes to the database
-    conn.commit()
-    # close the communication with the PostgreSQL
-    cur.close()
+    try:
+        # create a cursor
+        cur = conn.cursor()   
+        # execute a statement
+        cur.execute(sql)  
+        # commit the changes to the database
+        conn.commit()
+        # close the communication with the PostgreSQL
+        cur.close()
+    except Exception as ex:
+        print ("ERROR: ", ex) 
 
 if __name__ == "__main__":  
-    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
+    print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " INIT START #####")
     try:
         #read config
         config.read('rs485.ini')
@@ -63,7 +66,7 @@ if __name__ == "__main__":
             ExecTimescaleDb(conn, line)
             print("SQL: {}".format(line))
 
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " INIT END #####")
         
     except Exception as ex:
         print ("ERROR: ", ex) 

@@ -9,7 +9,6 @@ RUN pip3 install configparser pymodbus psycopg2
 # copy files
 COPY init.sql /app/init.sql
 COPY init.py /app/init.py
-COPY init.sh /app/init.sh
 COPY rs485.py /app/rs485.py
 COPY rs485.ini /app/rs485.ini
 COPY rs485.sh /app/rs485.sh
