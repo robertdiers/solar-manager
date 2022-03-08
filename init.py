@@ -27,7 +27,7 @@ if __name__ == "__main__":
     print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " INIT START #####")
     try:
         #read config
-        config.read('rs485.ini')
+        config.read('solar-manager.ini')
 
         #read config and default values 
         timescaledb_ip = config['MetricSection']['timescaledb_ip']

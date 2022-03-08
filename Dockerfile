@@ -10,11 +10,10 @@ RUN pip3 install configparser pymodbus psycopg2
 COPY init.sql /app/init.sql
 COPY init.py /app/init.py
 COPY rs485.py /app/rs485.py
-COPY rs485.ini /app/rs485.ini
 COPY rs485.sh /app/rs485.sh
 COPY solar-manager.py /app/solar-manager.py
-COPY solar-manager.ini /app/solar-manager.ini
 COPY solar-manager.sh /app/solar-manager.sh
+COPY solar-manager.ini /app/solar-manager.ini
 COPY entrypoint.sh /app/entrypoint.sh
 COPY container_cron /etc/cron.d/container_cron
 

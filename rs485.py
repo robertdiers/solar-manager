@@ -116,7 +116,7 @@ if __name__ == "__main__":
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:
         #read config
-        config.read('rs485.ini')
+        config.read('solar-manager.ini')
 
         #read config and default values
         rs485_device = config['RS485Section']['rs485_device']  
