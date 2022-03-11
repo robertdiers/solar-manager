@@ -4,6 +4,7 @@ import pymodbus
 import configparser
 import os
 import psycopg2
+import math
 from datetime import datetime
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
@@ -76,8 +77,12 @@ def IncreaseTimescaleDb(conn, table, value, maxOutput):
     cur.execute(sql)  
     row = cur.fetchone()
     valueold = row[0]
+    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " valueold: " + str(valueold)) 
+    if math.isnan(valueold):
+        valueold = 0
     # calculation
     valuenew = valueold + value
+    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " valuenew: " + str(valuenew)) 
     # max/min check 
     if maxOutput < valuenew:
         valuenew = maxOutput
@@ -324,7 +329,10 @@ if __name__ == "__main__":
         now = datetime.now()
         if now.hour == 12 and now.minute < 5:
             surplus = 10000
+
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: " + str(surplus))  
         soyoval = IncreaseTimescaleDb(conn, 'soyosource', -surplus, float(maxOutput))
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " soyoval: " + str(soyoval)) 
 
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
 
