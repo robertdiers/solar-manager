@@ -342,6 +342,7 @@ if __name__ == "__main__":
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: " + str(surplus))  
         soyoval = IncreaseTimescaleDb(conn, 'soyosource', -surplus, float(maxOutput))
+        WriteTimescaleDb(conn, 'solar_soyosource', soyoval)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " soyoval: " + str(soyoval)) 
 
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  

@@ -85,3 +85,8 @@ SELECT create_hypertable('solar_soyosource', 'time');
 ALTER TABLE solar_soyosource SET ( timescaledb.compress, timescaledb.compress_segmentby = 'time' );
 SELECT add_compression_policy('solar_soyosource', INTERVAL '1 days');
 SELECT add_retention_policy('solar_soyosource', INTERVAL '7 days');
+CREATE TABLE solar_soyosource_inverter ( "time" timestamptz NOT NULL , "value" double precision );
+SELECT create_hypertable('solar_soyosource_inverter', 'time');
+ALTER TABLE solar_soyosource_inverter SET ( timescaledb.compress, timescaledb.compress_segmentby = 'time' );
+SELECT add_compression_policy('solar_soyosource_inverter', INTERVAL '1 days');
+SELECT add_retention_policy('solar_soyosource_inverter', INTERVAL '7 days');
