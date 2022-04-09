@@ -101,7 +101,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -133,7 +133,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -166,7 +166,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -199,7 +199,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -232,7 +232,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -265,7 +265,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -298,7 +298,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -318,6 +318,39 @@
             ]
           ],
           "table": "solar_soyosource",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "UEPavALnz"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_soyosource_inverter\nFROM solar_soyosource_inverter\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_soyosource_inverter",
           "timeColumn": "\"time\"",
           "timeColumnType": "timestamptz",
           "where": [
@@ -405,7 +438,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -437,7 +470,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -470,7 +503,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "j1OXVvRRk"
+            "uid": "UEPavALnz"
           },
           "format": "time_series",
           "group": [],
@@ -513,13 +546,13 @@
     "list": []
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Robert",
   "uid": "EFixgMmRz",
-  "version": 5,
+  "version": 4,
   "weekStart": ""
 }
