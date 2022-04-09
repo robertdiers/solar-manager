@@ -68,8 +68,7 @@ def WriteTimescaleDb(conn, table, value):
     # close the communication with the PostgreSQL
     cur.close()
 
-# increase value in TimescaleDB
-def IncreaseTimescaleDb(conn, table, value, maxOutput):
+def ActualValue(conn, table):
     # create a cursor
     cur = conn.cursor()   
     # execute a statement
@@ -80,6 +79,15 @@ def IncreaseTimescaleDb(conn, table, value, maxOutput):
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " valueold: " + str(valueold)) 
     if math.isnan(valueold):
         valueold = 0
+    # close the communication with the PostgreSQL
+    cur.close()
+    return valueold
+
+# increase value in TimescaleDB
+def IncreaseTimescaleDb(conn, table, value, maxOutput):
+    # create a cursor
+    cur = conn.cursor()
+    valueold = ActualValue(conn, table)
     # calculation
     valuenew = valueold + value
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " valuenew: " + str(valuenew)) 
@@ -319,8 +327,10 @@ if __name__ == "__main__":
         
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(round(consumption_total,2)) + ", generation: " + str(generation) + ", surplus: " + str(surplus) + ", powerToBattery: " + str(powerToBattery) + ", powerToGrid: " + str(powerToGrid))   
         
-        # charger
-        chargerval = Charger(conn, tasmota_charge_ip, surplus, tasmota_charge_start, tasmota_charge_end)
+        # charger - we need to substract actual soyosource value
+        valuesoyosource = ActualValue(conn, 'soyosource')
+        chargersurplus = surplus - valuesoyosource
+        chargerval = Charger(conn, tasmota_charge_ip, chargersurplus, tasmota_charge_start, tasmota_charge_end)
         
         # idm
         idmval = Idm(conn, powerToGrid, feed_in_limit, idm_ip, idm_port)
