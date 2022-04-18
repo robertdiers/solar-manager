@@ -1,2 +1,2 @@
-docker build --tag robertdiers/solarmanager:arm64 .
-docker push robertdiers/solarmanager:arm64
+podman build --tag docker.io/robertdiers/solarmanager:arm64 .
+podman push docker.io/robertdiers/solarmanager:arm64

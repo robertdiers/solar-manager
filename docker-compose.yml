@@ -2,10 +2,7 @@ version: '3'
 services:
     vsc-server:
         build: vsc
-        container_name: code-server-solar-manager
         hostname: code-server-solar-manager
-        networks:
-            solar-manager-net:
         volumes:
             - $HOME/.config:/home/coder/.config
             - $HOME/.gitconfig:/home/coder/.gitconfig
@@ -20,6 +17,4 @@ services:
         ports:
             - 8080:8080
 
-networks:
-    solar-manager-net:
 

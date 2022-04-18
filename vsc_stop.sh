@@ -1,2 +1,2 @@
 # stop all containers
-docker-compose -p vsc-solar-manager stop
+podman-compose -p vsc-solar-manager stop
