@@ -59,6 +59,20 @@ def increase(conn, table, value, maxValue):
     cur.close()
     return valuenew
 
+# exec in db
+def exec(conn, sql):
+    try:
+        # create a cursor
+        cur = conn.cursor()   
+        # execute a statement
+        cur.execute(sql)  
+        # commit the changes to the database
+        conn.commit()
+        # close the communication with the PostgreSQL
+        cur.close()
+    except Exception as ex:
+        print ("ERROR: ", ex) 
+
 def connect():  
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:
