@@ -21,7 +21,7 @@ def WriteTimescaleDb(conn, table, value):
     # close the communication with the PostgreSQL
     cur.close()
 
-# write metric to TimescaleDB
+# read metric to TimescaleDB
 def ReadTimescaleDb(conn, table):
     # create a cursor
     cur = conn.cursor()   
