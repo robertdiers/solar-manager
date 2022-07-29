@@ -14,6 +14,10 @@ COPY rs485.sh /app/rs485.sh
 COPY solar-manager.py /app/solar-manager.py
 COPY solar-manager.sh /app/solar-manager.sh
 COPY solar-manager.ini /app/solar-manager.ini
+COPY IdmPump.py /app/IdmPump.py
+COPY Kostal.py /app/Kostal.py
+COPY Tasmota.py /app/Tasmota.py
+COPY TimescaleDb.py /app/TimescaleDb.py
 COPY entrypoint.sh /app/entrypoint.sh
 COPY container_cron /etc/cron.d/container_cron
 
