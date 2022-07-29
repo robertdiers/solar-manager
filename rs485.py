@@ -2,39 +2,13 @@
 
 import configparser
 import os
-import psycopg2
 import serial
 from datetime import datetime
 
+import TimescaleDb
+
 #read config
 config = configparser.ConfigParser()
-
-# write metric to TimescaleDB
-def WriteTimescaleDb(conn, table, value):
-    # create a cursor
-    cur = conn.cursor()   
-    # execute a statement
-    sql = 'insert into '+table+' (time, value) values (now(), %s)'
-    cur.execute(sql, (value,))   
-    # commit the changes to the database
-    conn.commit()
-    # close the communication with the PostgreSQL
-    cur.close()
-
-# read metric to TimescaleDB
-def ReadTimescaleDb(conn, table):
-    # create a cursor
-    cur = conn.cursor()   
-    # execute a statement
-    sql = 'SELECT value FROM '+table
-    cur.execute(sql)  
-    row = cur.fetchone()
-    value = row[0]
-    # commit the changes to the database
-    conn.commit()
-    # close the communication with the PostgreSQL
-    cur.close()
-    return value
 
 # Soyosource demand calculation
 def computeDemand(sourceValue, maxOutput, numberOfUnits):
@@ -94,14 +68,14 @@ def RS485(conn, rs485_device, numberOfUnits, maxOutput):
         serialWrite = serial.Serial(rs485_device, 4800, timeout=1) # define serial port on which to output RS485 data
 
         # we will send the demand from Timescaledb
-        tsdbval = ReadTimescaleDb(conn, 'soyosource')
+        tsdbval = TimescaleDb.read(conn, 'soyosource')
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
         demand = computeDemand(tsdbval, maxOutput, numberOfUnits)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
         if int(actualsec) >= 4 and int(actualsec) < 6:
-            WriteTimescaleDb(conn, 'solar_soyosource_inverter', demand)
+            TimescaleDb.write(conn, 'solar_soyosource_inverter', demand)
         if int(actualsec) >= 34 and int(actualsec) < 36:
-            WriteTimescaleDb(conn, 'solar_soyosource_inverter', demand)
+            TimescaleDb.write(conn, 'solar_soyosource_inverter', demand)
 
         # prepare packet and send        
         simulatedPacket = createPacket(demand, byte4, byte5, byte7)
@@ -122,9 +96,6 @@ if __name__ == "__main__":
         rs485_device = config['RS485Section']['rs485_device']  
         numberOfUnits = config['RS485Section']['numberOfUnits']  
         maxOutput = config['RS485Section']['maxOutput']  
-        timescaledb_ip = config['MetricSection']['timescaledb_ip']
-        timescaledb_username = config['MetricSection']['timescaledb_username']
-        timescaledb_password = config['MetricSection']['timescaledb_password']
 
         # override with environment variables        
         if os.getenv('RS485_DEVICE','None') != 'None':
@@ -136,29 +107,13 @@ if __name__ == "__main__":
         if os.getenv('MAXOUTPUT','None') != 'None':
             maxOutput = os.getenv('MAXOUTPUT')
             print ("using env: MAXOUTPUT")
-        if os.getenv('TIMESCALEDB_IP','None') != 'None':
-            timescaledb_ip = os.getenv('TIMESCALEDB_IP')
-            print ("using env: TIMESCALEDB_IP")
-        if os.getenv('TIMESCALEDB_USERNAME','None') != 'None':
-            timescaledb_username = os.getenv('TIMESCALEDB_USERNAME')
-            print ("using env: TIMESCALEDB_USERNAME")
-        if os.getenv('TIMESCALEDB_PASSWORD','None') != 'None':
-            timescaledb_password = os.getenv('TIMESCALEDB_PASSWORD')
-            print ("using env: TIMESCALEDB_PASSWORD")
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " rs485_device: ", rs485_device)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " numberOfUnits: ", numberOfUnits)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_ip: ", timescaledb_ip)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_username: ", timescaledb_username)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_password: ", timescaledb_password)
         
         #init Timescaledb
-        conn = psycopg2.connect(
-            host=timescaledb_ip,
-            database="postgres",
-            user=timescaledb_username,
-            password=timescaledb_password)        
+        conn = TimescaleDb.connect()      
 
         # RS485 Soyosource
         RS485(conn, rs485_device, float(numberOfUnits), float(maxOutput))
@@ -169,5 +124,5 @@ if __name__ == "__main__":
         print ("ERROR: ", ex) 
     finally:
         if conn is not None:
-            conn.close()
+            TimescaleDb.close(conn)
             #print('Database connection closed.')          
