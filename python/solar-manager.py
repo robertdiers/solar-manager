@@ -80,6 +80,16 @@ def metrics():
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " technical_room_temperature: " + str(technical_room_temperature))  
     except Exception as ex:
         print ("ERROR: ", ex) 
+    try:
+        solar_battery_charger_power = Tasmota.get("tasmota_charger", "8", "StatusSNS_ENERGY_Power")
+        TimescaleDb.write('solar_battery_charger_power', solar_battery_charger_power)
+        solar_battery_charger_yesterday = Tasmota.get("tasmota_charger", "8", "StatusSNS_ENERGY_Yesterday")
+        TimescaleDb.write('solar_battery_charger_yesterday', solar_battery_charger_yesterday)
+        solar_battery_charger_today = Tasmota.get("tasmota_charger", "8", "StatusSNS_ENERGY_Today")
+        TimescaleDb.write('solar_battery_charger_today', solar_battery_charger_today)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " solar_battery_charger_power: " + str(solar_battery_charger_power)+", solar_battery_charger_yesterday: " + str(solar_battery_charger_yesterday)+", solar_battery_charger_today: " + str(solar_battery_charger_today))  
+    except Exception as ex:
+        print ("ERROR: ", ex) 
 
 if __name__ == "__main__":  
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
