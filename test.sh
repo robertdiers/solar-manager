@@ -1,0 +1,1 @@
+sudo docker run robertdiers/solarmanager:x64

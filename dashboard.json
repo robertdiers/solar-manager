@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -26,6 +29,10 @@
   "liveNow": false,
   "panels": [
     {
+      "datasource": {
+        "type": "postgres",
+        "uid": "WsNRUSzVz"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -101,7 +108,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -133,7 +140,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -166,7 +173,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -199,7 +206,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -232,7 +239,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -265,7 +272,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -298,7 +305,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -327,45 +334,16 @@
               "type": "macro"
             }
           ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "UEPavALnz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_soyosource_inverter\nFROM solar_soyosource_inverter\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "D",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_soyosource_inverter",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
         }
       ],
       "title": "Watt",
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "postgres",
+        "uid": "WsNRUSzVz"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -417,8 +395,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 24,
+        "h": 8,
+        "w": 12,
         "x": 0,
         "y": 14
       },
@@ -438,7 +416,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -470,7 +448,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -503,7 +481,7 @@
         {
           "datasource": {
             "type": "postgres",
-            "uid": "UEPavALnz"
+            "uid": "WsNRUSzVz"
           },
           "format": "time_series",
           "group": [],
@@ -536,23 +514,133 @@
       ],
       "title": "Batterie und Ladegeraet",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "WsNRUSzVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as technical_room_temperature\nFROM technical_room_temperature\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_battery_chargestatus",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Temperaturen",
+      "type": "timeseries"
     }
   ],
   "refresh": "",
-  "schemaVersion": 35,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Robert",
   "uid": "EFixgMmRz",
-  "version": 4,
+  "version": 5,
   "weekStart": ""
 }
