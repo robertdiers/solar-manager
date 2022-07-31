@@ -664,8 +664,8 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_charger_yesterday\nFROM solar_battery_charger_yesterday\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "B",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_charger_today\nFROM solar_battery_charger_today\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "refId": "C",
           "select": [
             [
               {
@@ -697,8 +697,8 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_charger_today\nFROM solar_battery_charger_today\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "C",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_dailyyield\nFROM solar_kostal_dailyyield\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "refId": "B",
           "select": [
             [
               {
@@ -740,6 +740,6 @@
   "timezone": "",
   "title": "Robert",
   "uid": "EFixgMmRz",
-  "version": 6,
+  "version": 8,
   "weekStart": ""
 }
