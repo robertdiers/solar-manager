@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /app
-python3 python/solar-manager.py
+cd /app/python
+python3 solar-manager.py

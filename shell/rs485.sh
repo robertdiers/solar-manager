@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /app
-python3 python/rs485.py
+cd /app/python
+python3 rs485.py
