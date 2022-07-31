@@ -14,12 +14,9 @@ import Tasmota
 config = configparser.ConfigParser()
 
 # charger
-def Charger(charger_mqtt_name, surplus, charge_start, charge_end):
+def charger(charger_mqtt_name, surplus, charge_start, charge_end):
     try:
         retval = 'ON'
-
-        # Tasmota mqtt client
-        Tasmota.connect()
 
         #we will always charge between 12:00 and 12:05 to ensure a kind of "battery protect"
         now = datetime.now()
@@ -48,7 +45,7 @@ def Charger(charger_mqtt_name, surplus, charge_start, charge_end):
         print ("ERROR Charger: ", ex)  
 
 # idm heat pump
-def Idm(powerToGrid, feed_in_limit):
+def idm(powerToGrid, feed_in_limit):
     try:
         #feed in must be above our limit
         feed_in = powerToGrid;
@@ -74,6 +71,12 @@ def Idm(powerToGrid, feed_in_limit):
         print ("ERROR Idm: ", ex) 
     finally:
         IdmPump.close()  
+
+# idm heat pump
+def metrics():
+    technical_room_temperature = Tasmota.get("tasmota_server", "8", "StatusSNS_SI7021_Temperature")
+    TimescaleDb.write('technical_room_temperature', technical_room_temperature)
+    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " technical_room_temperature: " + str(technical_room_temperature))  
 
 if __name__ == "__main__":  
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
@@ -113,6 +116,7 @@ if __name__ == "__main__":
         
         TimescaleDb.connect()
         Kostal.connect()
+        Tasmota.connect()
 
         #all additional invertes will decrease my home consumption, so it might be negative - this is fine
         consumptionbat = Kostal.readfloat(106,71)
@@ -143,12 +147,12 @@ if __name__ == "__main__":
         #TimescaleDb.write('solar_kostal_battery', battery)
         if batteryamp > 0.1:
             #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery: discharge")
-            TimescaleDb.write('solar_kostal_batteryflag', -1)
+            TimescaleDb.write('solar_kostal_batteryflag', 0)
         elif batteryamp < -0.1:
             #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery: charge")
             TimescaleDb.write('solar_kostal_batteryflag', 1)
         else:
-            TimescaleDb.write('solar_kostal_batteryflag', 0)
+            TimescaleDb.write('solar_kostal_batteryflag', 0.5)
         batterypercent = Kostal.readfloat(210,71)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " battery (%): ", batterypercent)
         TimescaleDb.write('solar_kostal_batterypercent', (batterypercent/100))
@@ -190,10 +194,10 @@ if __name__ == "__main__":
         valuesoyosource = TimescaleDb.read('soyosource')
         chargersurplus = surplus - valuesoyosource
 
-        chargerval = Charger(charge_mqtt_name, chargersurplus, charge_start, charge_end)
+        chargerval = charger(charge_mqtt_name, chargersurplus, charge_start, charge_end)
         
         # idm
-        idmval = Idm(powerToGrid, feed_in_limit)
+        idmval = idm(powerToGrid, feed_in_limit)
 
         # soyosource should not use battery during this time
         now = datetime.now()
@@ -206,6 +210,9 @@ if __name__ == "__main__":
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " soyoval: " + str(soyoval)) 
 
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
+    
+        # metrics
+        metrics()
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         

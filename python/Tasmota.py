@@ -2,12 +2,16 @@
 
 import configparser
 import os
+import time
+import json
 from datetime import datetime
 from paho.mqtt import client as mqtt_client
 
 #read config
 config = configparser.ConfigParser()
 client = "unknown"
+searchattribute = "unknown"
+valueattribute = "unknown"
 
 def on(name):
     topic = "cmnd/" + name + "/Power"
@@ -21,7 +25,52 @@ def off(name):
     global client
     client.publish(topic, "OFF")
 
+def flatten_json(y):
+    out = {}
+    def flatten(x, name=''):
+        if type(x) is dict:
+            for a in x:
+                flatten(x[a], name + a + '_')
+        elif type(x) is list:
+            i = 0
+            for a in x:
+                flatten(a, name + str(i) + '_')
+                i += 1
+        else:
+            out[name[:-1]] = x
+    flatten(y)
+    return out
 
+def on_message(client, userdata, message):
+    global searchattribute
+    global valueattribute
+    content = str(message.payload.decode("utf-8"))
+    #print(content)
+    json_object = flatten_json(json.loads(content))
+    #print(json_object)
+    if searchattribute in json_object:
+        valueattribute = json_object[searchattribute]
+    else:
+        valueattribute = "n/a"
+
+def get(name, statusnumber, attribute):
+    topic = "cmnd/" + name + "/Status"
+    topicstat = "stat/" + name + "/#"
+    #print(topic)
+    global client
+    global searchattribute
+    global valueattribute
+    searchattribute = attribute
+    valueattribute = "unknown"
+    client.on_message=on_message
+    client.subscribe(topicstat)
+    client.loop_start()
+    #send status request to tasmota
+    client.publish(topic, statusnumber)
+    while valueattribute in ["unknown"]:
+        time.sleep(0.1)
+    client.loop_stop()
+    return valueattribute
 
 def connect():
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
