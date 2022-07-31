@@ -334,6 +334,39 @@
               "type": "macro"
             }
           ]
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_charger_power\nFROM solar_battery_charger_power\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_soyosource",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
         }
       ],
       "title": "Watt",
@@ -620,9 +653,75 @@
               "type": "macro"
             }
           ]
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_charger_yesterday\nFROM solar_battery_charger_yesterday\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_battery_chargestatus",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_charger_today\nFROM solar_battery_charger_today\nWHERE\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_battery_chargestatus",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
         }
       ],
-      "title": "Temperaturen",
+      "title": "Temperaturen und kWh",
       "type": "timeseries"
     }
   ],
@@ -641,6 +740,6 @@
   "timezone": "",
   "title": "Robert",
   "uid": "EFixgMmRz",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
