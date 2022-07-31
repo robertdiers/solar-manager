@@ -72,7 +72,7 @@ def idm(powerToGrid, feed_in_limit):
     finally:
         IdmPump.close()  
 
-# idm heat pump
+# metrics from Tasmota
 def metrics():
     try:
         technical_room_temperature = Tasmota.get("tasmota_server", "8", "StatusSNS_SI7021_Temperature")
@@ -198,6 +198,14 @@ if __name__ == "__main__":
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: ", surplus)
         TimescaleDb.write('solar_kostal_surplus', surplus)
+
+        dailyyield = round(Kostal.readfloat(322,71) / 1000,2)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " dailyyield: ", dailyyield)
+        TimescaleDb.write('solar_kostal_dailyyield', dailyyield)
+
+        homeconsumption = round(Kostal.readfloat(118,71) / 1000 / 1000,2)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " homeconsumption: ", homeconsumption)
+        TimescaleDb.write('solar_kostal_homeconsumption', homeconsumption)
         
         Kostal.close()
         
