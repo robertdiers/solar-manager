@@ -200,10 +200,6 @@ if __name__ == "__main__":
         dailyyield = round(Kostal.readfloat(322,71) / 1000,2)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " dailyyield: ", dailyyield)
         TimescaleDb.write('solar_kostal_dailyyield', dailyyield)
-
-        homeconsumption = round(Kostal.readfloat(118,71) / 1000 / 1000,2)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " homeconsumption: ", homeconsumption)
-        TimescaleDb.write('solar_kostal_homeconsumption', homeconsumption)
         
         Kostal.close()
         
