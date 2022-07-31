@@ -74,9 +74,12 @@ def idm(powerToGrid, feed_in_limit):
 
 # idm heat pump
 def metrics():
-    technical_room_temperature = Tasmota.get("tasmota_server", "8", "StatusSNS_SI7021_Temperature")
-    TimescaleDb.write('technical_room_temperature', technical_room_temperature)
-    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " technical_room_temperature: " + str(technical_room_temperature))  
+    try:
+        technical_room_temperature = Tasmota.get("tasmota_server", "8", "StatusSNS_SI7021_Temperature")
+        TimescaleDb.write('technical_room_temperature', technical_room_temperature)
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " technical_room_temperature: " + str(technical_room_temperature))  
+    except Exception as ex:
+        print ("ERROR: ", ex) 
 
 if __name__ == "__main__":  
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")

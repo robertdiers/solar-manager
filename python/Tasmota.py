@@ -67,9 +67,13 @@ def get(name, statusnumber, attribute):
     client.loop_start()
     #send status request to tasmota
     client.publish(topic, statusnumber)
-    while valueattribute in ["unknown"]:
+    counter = 0
+    #wait max 1 sec
+    while valueattribute in ["unknown"] and counter < 10:
+        counter = counter + 1
         time.sleep(0.1)
     client.loop_stop()
+    #print(valueattribute)
     return valueattribute
 
 def connect():
