@@ -6,4 +6,3 @@ ALTER TABLE metrics SET ( timescaledb.compress, timescaledb.compress_segmentby =
 SELECT add_compression_policy('metrics', INTERVAL '1 days');
 SELECT add_retention_policy('metrics', INTERVAL '7 days');
 CREATE INDEX ON metrics ("key", "time" DESC);
-CREATE INDEX ON metrics ("time" DESC);
