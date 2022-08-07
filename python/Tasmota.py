@@ -78,6 +78,7 @@ def get(name, statusnumber, attributes):
             counter = counter + 1
             time.sleep(0.1)
         client.loop_stop()
+        client.unsubscribe(topicstat)
         #print(valueattributes)
         return valueattributes
     except Exception as ex:
