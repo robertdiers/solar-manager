@@ -7,7 +7,7 @@
 * additional 48V battery block
 * Tasmota device to manage a 48V charger
 * 3 SoyoSource GTN 1200 (Grid Tie inverter)
-* USB to RS485 Dongle to manage the SoyoSource output
+* USB to RS485 dongle to manage the SoyoSource output
 * Orange Pi 3 LTS to run the containers and USB dongle
 
 ## main Python scripts (startup and cron triggered):
