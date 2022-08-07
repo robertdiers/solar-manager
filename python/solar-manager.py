@@ -65,12 +65,12 @@ def idm(idm_ip, idm_port, powerToGrid, feed_in_limit):
         print ("ERROR idm: ", ex)  
 
 # metrics from Tasmota
-def tasmota():
+def tasmota(charge_mqtt_name, server_mqtt_name):
     try:
-        result = Tasmota.get("tasmota_server", "8", ["StatusSNS_SI7021_Temperature"])
+        result = Tasmota.get(server_mqtt_name, "8", ["StatusSNS_SI7021_Temperature"])
         TimescaleDb.write('technical_room_temperature', result[0])
     
-        result = Tasmota.get("tasmota_charger", "8", ["StatusSNS_ENERGY_Power", "StatusSNS_ENERGY_Today"])
+        result = Tasmota.get(charge_mqtt_name, "8", ["StatusSNS_ENERGY_Power", "StatusSNS_ENERGY_Today"])
         TimescaleDb.write('solar_battery_charger_power', result[0])
         TimescaleDb.write('solar_battery_charger_today', result[1])
     except Exception as ex:
@@ -107,6 +107,8 @@ if __name__ == "__main__":
         charge_start = config['ChargerSection']['charge_start']  
         charge_end = config['ChargerSection']['charge_end']  
         charge_mqtt_name = config['ChargerSection']['charge_mqtt_name']
+
+        server_mqtt_name = config['ServerSection']['server_mqtt_name']
 
         maxOutput = config['RS485Section']['maxOutput']
 
@@ -145,6 +147,10 @@ if __name__ == "__main__":
         if os.getenv('CHARGE_MQTT_NAME','None') != 'None':
             charge_mqtt_name = os.getenv('CHARGE_MQTT_NAME')
             print ("using env: CHARGE_MQTT_NAME")
+        
+        if os.getenv('SERVER_MQTT_NAME','None') != 'None':
+            server_mqtt_name = os.getenv('SERVER_MQTT_NAME')
+            print ("using env: SERVER_MQTT_NAME")
         
         if os.getenv('MAXOUTPUT','None') != 'None':
             maxOutput = os.getenv('MAXOUTPUT')
@@ -194,6 +200,8 @@ if __name__ == "__main__":
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charge_start: ", charge_start)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charge_end: ", charge_end)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charge_mqtt_name: ", charge_mqtt_name) 
+
+        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " server_mqtt_name: ", server_mqtt_name) 
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)
 
@@ -253,7 +261,7 @@ if __name__ == "__main__":
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
     
         # metrics
-        tasmota()
+        tasmota(charge_mqtt_name, server_mqtt_name)
         byd(byd_ip, byd_port)
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
