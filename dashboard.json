@@ -55,12 +55,12 @@
               "fill": "solid"
             },
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 2,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -114,7 +114,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_idm_feedin\nFROM metrics\nWHERE \"key\" = 'solar_idm_feedin' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_idm_feedin','solar_kostal_consumption_total','solar_kostal_generation_total','solar_kostal_inverter','solar_kostal_powertogrid','solar_kostal_surplus','solar_soyosource','solar_battery_charger_power','solar_byd_power')\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -124,42 +124,17 @@
                 ],
                 "type": "column"
               }
-            ]
-          ],
-          "table": "solar_idm_feedin",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_consumption_total\nFROM metrics\nWHERE \"key\" = 'solar_kostal_consumption_total' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "C",
-          "select": [
+            ],
             [
               {
                 "params": [
-                  "value"
+                  "key"
                 ],
                 "type": "column"
               }
             ]
           ],
-          "table": "solar_kostal_consumption_total",
+          "table": "metrics",
           "timeColumn": "\"time\"",
           "timeColumnType": "timestamptz",
           "where": [
@@ -167,237 +142,15 @@
               "name": "$__timeFilter",
               "params": [],
               "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_generation_total\nFROM metrics\nWHERE \"key\" = 'solar_kostal_generation_total' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "I",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_generation_total",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
+            },
             {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_inverter\nFROM metrics\nWHERE \"key\" = 'solar_kostal_inverter' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "J",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_inverter",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_powertogrid\nFROM metrics\nWHERE \"key\" = 'solar_kostal_powertogrid' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "K",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_powertogrid",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_surplus\nFROM metrics\nWHERE \"key\" = 'solar_kostal_surplus' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "L",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_surplus",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_soyosource\nFROM metrics\nWHERE \"key\" = 'solar_soyosource' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "B",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_soyosource",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_charger_power\nFROM metrics\nWHERE \"key\" = 'solar_battery_charger_power' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "D",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_soyosource",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_power\nFROM metrics\nWHERE \"key\" = 'solar_byd_power' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "E",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_soyosource",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
+              "name": "",
+              "params": [
+                "key",
+                "=",
+                "value"
+              ],
+              "type": "expression"
             }
           ]
         }
@@ -429,12 +182,12 @@
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 2,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -486,175 +239,11 @@
           },
           "format": "time_series",
           "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_chargestatus\nFROM metrics\nWHERE \"key\" = 'solar_battery_chargestatus' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_battery_chargestatus",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_batteryflag\nFROM metrics\nWHERE \"key\" = 'solar_kostal_batteryflag' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "B",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_battery",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_batterypercent\nFROM metrics\nWHERE \"key\" = 'solar_kostal_batterypercent' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "C",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_batterypercent",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_error\nFROM metrics\nWHERE \"key\" = 'solar_byd_error' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "D",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_batterypercent",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_soh\nFROM metrics\nWHERE \"key\" = 'solar_byd_soh' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "E",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_batterypercent",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_soc\nFROM metrics\nWHERE \"key\" = 'solar_byd_soc' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "F",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_soc','solar_byd_soh','solar_byd_error','solar_kostal_batterypercent','solar_kostal_batteryflag','solar_battery_chargestatus')\nORDER BY 1",
+          "refId": "G",
           "select": [
             [
               {
@@ -704,12 +293,12 @@
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 2,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -761,175 +350,11 @@
           },
           "format": "time_series",
           "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as technical_room_temperature\nFROM metrics\nWHERE \"key\" = 'technical_room_temperature' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_battery_chargestatus",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_battery_charger_today\nFROM metrics\nWHERE \"key\" = 'solar_battery_charger_today' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "C",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_battery_chargestatus",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_kostal_dailyyield\nFROM metrics\nWHERE \"key\" = 'solar_kostal_dailyyield' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "B",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_battery_chargestatus",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_battemp\nFROM metrics\nWHERE \"key\" = 'solar_byd_battemp' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "D",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_battery_chargestatus",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_maxtemp\nFROM metrics\nWHERE \"key\" = 'solar_byd_maxtemp' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "E",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_battery_chargestatus",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_mintemp\nFROM metrics\nWHERE \"key\" = 'solar_byd_mintemp' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "F",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_mintemp','solar_byd_maxtemp','solar_byd_battemp','solar_kostal_dailyyield','solar_battery_charger_today','technical_room_temperature')\nORDER BY 1",
+          "refId": "G",
           "select": [
             [
               {
@@ -979,12 +404,12 @@
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 2,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1036,76 +461,11 @@
           },
           "format": "time_series",
           "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_maxvolt\nFROM metrics\nWHERE \"key\" = 'solar_byd_maxvolt' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_battery_chargestatus",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_minvolt\nFROM metrics\nWHERE \"key\" = 'solar_byd_minvolt' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "B",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "solar_kostal_battery",
-          "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        },
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "WsNRUSzVz"
-          },
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_diffvolt\nFROM metrics\nWHERE \"key\" = 'solar_byd_diffvolt' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
-          "refId": "C",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_diffvolt','solar_byd_minvolt','solar_byd_maxvolt')\nORDER BY 1",
+          "refId": "D",
           "select": [
             [
               {
@@ -1155,12 +515,12 @@
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 2,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1214,7 +574,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value as solar_byd_maxvolt\nFROM metrics\nWHERE \"key\" = 'solar_byd_maxvolt' AND\n  $__timeFilter(\"time\")\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_diffvolt')\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -1257,6 +617,6 @@
   "timezone": "",
   "title": "Robert",
   "uid": "EFixgMmRz",
-  "version": 13,
+  "version": 15,
   "weekStart": ""
 }
