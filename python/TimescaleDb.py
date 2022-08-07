@@ -3,7 +3,6 @@
 import os
 import psycopg2
 import math
-from datetime import datetime
 
 conn = "unknown"
 
@@ -30,7 +29,6 @@ def read(table):
     cur.execute(sql)  
     row = cur.fetchone()
     value = row[0]
-    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " value: " + str(value)) 
     if math.isnan(value):
         value = 0
     # close the communication with the PostgreSQL
@@ -45,7 +43,6 @@ def increase(table, value, maxValue):
     valueold = read(table)
     # calculation
     valuenew = valueold + value
-    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " valuenew: " + str(valuenew)) 
     # max/min check 
     if maxValue < valuenew:
         valuenew = maxValue
@@ -76,7 +73,6 @@ def exec(sql):
         print ("ERROR: ", ex) 
 
 def connect(timescaledb_ip, timescaledb_username, timescaledb_password):
-    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:       
         
         #init Timescaledb

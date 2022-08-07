@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import pymodbus
-import os
 from datetime import datetime
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian

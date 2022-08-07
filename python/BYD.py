@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 import socket
-import os
-from datetime import datetime
 
 BUFFER_SIZE = 1024
 MESSAGE_1 = "010300000066c5e0" #read serial

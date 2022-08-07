@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
-import os
 import time
 import json
-from datetime import datetime
 from paho.mqtt import client as mqtt_client
 
 client = "unknown"
@@ -85,7 +83,6 @@ def get(name, statusnumber, attributes):
         print ("ERROR Tasmota: ", ex) 
 
 def connect(mqtt_broker, mqtt_port, mqtt_user, mqtt_password):
-    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:
         
         client_id = 'python-mqtt-solarmanager'
