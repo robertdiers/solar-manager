@@ -8,7 +8,7 @@ from paho.mqtt import client as mqtt_client
 
 client = "unknown"
 searchattributes = []
-valueattributes = []
+valueattributes = {}
 
 def on(name):
     try:
@@ -53,9 +53,9 @@ def on_message(client, userdata, message):
     #print(json_object)
     for attribute in searchattributes:
         if attribute in json_object:
-            valueattributes.append(json_object[attribute])
+            valueattributes[attribute] = json_object[attribute]
         else:
-            valueattributes.append("n/a")
+            valueattributes[attribute] = "n/a"
 
 def get(name, statusnumber, attributes):
     try:
@@ -66,7 +66,7 @@ def get(name, statusnumber, attributes):
         global searchattributes
         global valueattributes
         searchattributes = attributes
-        valueattributes = []
+        valueattributes = {}
         client.on_message=on_message
         client.subscribe(topicstat)
         client.loop_start()

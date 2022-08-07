@@ -68,11 +68,11 @@ def idm(idm_ip, idm_port, powerToGrid, feed_in_limit):
 def tasmota(charge_mqtt_name, server_mqtt_name):
     try:
         result = Tasmota.get(server_mqtt_name, "8", ["StatusSNS_SI7021_Temperature"])
-        TimescaleDb.write('technical_room_temperature', result[0])
+        TimescaleDb.write('technical_room_temperature', result["StatusSNS_SI7021_Temperature"])
     
         result = Tasmota.get(charge_mqtt_name, "8", ["StatusSNS_ENERGY_Power", "StatusSNS_ENERGY_Today"])
-        TimescaleDb.write('solar_battery_charger_power', result[0])
-        TimescaleDb.write('solar_battery_charger_today', result[1])
+        TimescaleDb.write('solar_battery_charger_power', result["StatusSNS_ENERGY_Power"])
+        TimescaleDb.write('solar_battery_charger_today', result["StatusSNS_ENERGY_Today"])
     except Exception as ex:
         print ("ERROR tasmota: ", ex)  
 
