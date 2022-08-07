@@ -23,7 +23,9 @@
 * TimescaleDb.py - read and write TimescaleDB
 
 ## Docker
+```
 docker run -d --restart always --device=/dev/ttyUSB0:/dev/ttyUSB0 --name solarmanager robertdiers/solarmanager:arm64
+```
 
 ### TimescaleDB
 Using /dev/shm to store data in memory, sd card doesn't have to store it:
