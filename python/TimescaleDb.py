@@ -13,14 +13,14 @@ def write(table, value):
     # create a cursor      
     cur = conn.cursor()   
     # execute a statement
-    sql = 'insert into '+table+' (time, value) values (now(), %s)'
-    cur.execute(sql, (value,))   
+    sql = 'insert into metrics (time, key, value) values (now(), %s, %s)'
+    cur.execute(sql, (table,value,))   
     # commit the changes to the database
     conn.commit()
     # close the communication with the PostgreSQL
     cur.close()
 
-# read metric to TimescaleDB
+# read from TimescaleDB
 def read(table):
     global conn
     # create a cursor   

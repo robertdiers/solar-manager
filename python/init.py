@@ -38,8 +38,8 @@ if __name__ == "__main__":
 
         # execute init script
         # Using readlines()
-        #file1 = open('adhoc.sql', 'r')
-        file1 = open('init.sql', 'r')
+        file1 = open('adhoc.sql', 'r')
+        #file1 = open('init.sql', 'r')
         Lines = file1.readlines()
         
         # Strips the newline character

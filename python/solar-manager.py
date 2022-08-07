@@ -256,7 +256,7 @@ if __name__ == "__main__":
         TimescaleDb.write('solar_soyosource', soyoval)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " soyoval: " + str(soyoval)) 
 
-        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(round(kostalvalues["consumption_total"],2)) + ", generation: " + str(kostalvalues["generation"]) + ", surplus: " + str(kostalvalues["surplus"]) + ", powerToBattery: " + str(kostalvalues["powerToBattery"]) + ", powerToGrid: " + str(kostalvalues["powerToGrid"] + ", charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
+        print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(round(kostalvalues["consumption_total"],2)) + ", generation: " + str(kostalvalues["generation"]) + ", surplus: " + str(kostalvalues["surplus"]) + ", powerToBattery: " + str(kostalvalues["powerToBattery"]) + ", powerToGrid: " + str(kostalvalues["powerToGrid"]) + ", charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
     
         # metrics
         tasmota(charge_mqtt_name, server_mqtt_name)
