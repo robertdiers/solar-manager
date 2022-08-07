@@ -28,13 +28,19 @@ docker run -d --restart always --device=/dev/ttyUSB0:/dev/ttyUSB0 --name solarma
 ### TimescaleDB
 Using /dev/shm to store data in memory, sd card doesn't have to store it:
 
+```
 docker run -d --restart always --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password -v /dev/shm/pgdata:/var/lib/postgresql/data timescale/timescaledb:latest-pg14
+```
 
 ### Grafana
 Dashboard JSON is placed in this repo:
 
+```
 docker run -d --name grafana --volume "$PWD/grafanadata:/var/lib/grafana" -p 3000:3000 --restart always grafana/grafana:latest
+```
 
 ### EMQX (MQTT broker)
-sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v $PWD/emqxdata:/opt/emqx/data --restart always emqx:latest
+```
+docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v $PWD/emqxdata:/opt/emqx/data --restart always emqx:latest
+```
 
