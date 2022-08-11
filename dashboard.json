@@ -353,7 +353,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_mintemp','solar_byd_maxtemp','solar_byd_battemp','technical_room_temperature','Daly1_Pack_MaxTemperature','Daly1_Pack_MinTemperature','Daly2_Pack_MaxTemperature','Daly2_Pack_MinTemperature','Daly3_Pack_MaxTemperature','Daly3_Pack_MinTemperature')\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_mintemp','solar_byd_maxtemp','solar_byd_battemp','technical_room_temperature','Daly1_Pack_MaxTemperature','Daly1_Pack_MinTemperature','Daly2_Pack_MaxTemperature','Daly2_Pack_MinTemperature','Daly3_Pack_MaxTemperature','Daly3_Pack_MinTemperature','Daly1_CellTemp_Temp Sensor 1','Daly2_CellTemp_Temp Sensor 1','Daly3_CellTemp_Temp Sensor 1')\nORDER BY 1",
           "refId": "G",
           "select": [
             [
@@ -1171,6 +1171,6 @@
   "timezone": "",
   "title": "Robert",
   "uid": "EFixgMmRz",
-  "version": 17,
+  "version": 18,
   "weekStart": ""
 }
