@@ -13,11 +13,14 @@
 
 ## main Python scripts (startup and cron triggered):
 * init.py - initializes TimescaleDB tables as they are removed when device restarts
-* solar-manager.py - business logic
+* daly-subscribe.py - subscribes to DALY MQTT output and store to database (https://github.com/softwarecrash/DALY-BMS-to-MQTT)
 * rs485.py - sends "to produce" value to Soyosource inverters using RS485 USB dongle
+* solar-manager.py - business logic
 
 ## additional Python modules
 * BYD.py - read actual values from BYD battery (TCP Socket)
+* Config.py - read config file and check for environment parameter overrides
+* Daly.py - subscribes to MQTT topic to read JSON with data
 * IdmPump.py - send actual solar power to iDM heat pump (TCP Modbus)
 * Kostal.py - read actual values from Kostal inverter (TCP Modbus)
 * Tasmota.py - turn Tasmota device on/off and read status (MQTT)

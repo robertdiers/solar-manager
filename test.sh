@@ -1,1 +1,2 @@
-sudo docker run robertdiers/solarmanager:x64
+sudo docker build --tag test .
+sudo docker run test
