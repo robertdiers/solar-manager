@@ -8,13 +8,13 @@ import Daly
 import TimescaleDb
 
 #define interesting attributes        
-attributes = ["Pack_Voltage", "Pack_SOC", "Pack_Cycles", "Pack_MinTemperature", "Pack_MaxTemperature", "Pack_High CellV", "Pack_Low CellV", "Pack_Cell Difference"]
+attributes = ["Pack_Voltage", "Pack_Current", "Pack_SOC", "Pack_Cycles", "Pack_MinTemperature", "Pack_MaxTemperature", "Pack_High CellV", "Pack_Low CellV", "Pack_Cell Difference"]
 #my blocks have 16 cells
 for x in range(16):
     attributes.append("CellV_CellV "+str(x))
 
 def writedb(name, json):
-    #print (json)
+    print (json)
     global attributes
     for attribute in attributes:
         #print(attribute)
