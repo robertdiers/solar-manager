@@ -24,6 +24,9 @@ def writedb(name, json):
             if attribute in 'Pack_Cell Difference':
                 value = value / 1000.0
                 #print (value)
+            if attribute in 'Pack_SOC':
+                value = value / 100.0
+                #print (value)
             TimescaleDb.write(name+'_'+attribute, value)
 
 if __name__ == "__main__":  
