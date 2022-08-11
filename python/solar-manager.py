@@ -1,18 +1,13 @@
 #!/usr/bin/env python
 
-import configparser
-import os
 from datetime import datetime
-from urllib.request import urlopen
 
 import TimescaleDb
 import IdmPump
 import Kostal
 import Tasmota
 import BYD
-
-#read config
-config = configparser.ConfigParser()
+import Config
 
 # charger
 def charger(charger_mqtt_name, surplus, charge_start, charge_end):
@@ -96,136 +91,14 @@ def byd(byd_ip, byd_port):
 if __name__ == "__main__":  
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:
-        #read config
-        config.read('solar-manager.ini')
-
-        #read config and default values
-        idm_ip = config['IdmSection']['idm_ip']
-        idm_port = config['IdmSection']['idm_port']  
-        feed_in_limit = int(config['IdmSection']['feed_in_limit']) 
-
-        charge_start = config['ChargerSection']['charge_start']  
-        charge_end = config['ChargerSection']['charge_end']  
-        charge_mqtt_name = config['ChargerSection']['charge_mqtt_name']
-
-        server_mqtt_name = config['ServerSection']['server_mqtt_name']
-
-        maxOutput = config['RS485Section']['maxOutput']
-
-        timescaledb_ip = config['DatabaseSection']['timescaledb_ip']
-        timescaledb_username = config['DatabaseSection']['timescaledb_username']
-        timescaledb_password = config['DatabaseSection']['timescaledb_password']
-
-        mqtt_broker = config['MqttSection']['mqtt_broker']
-        mqtt_port = config['MqttSection']['mqtt_port']
-        mqtt_user = config['MqttSection']['mqtt_user']
-        mqtt_password = config['MqttSection']['mqtt_password']
-
-        inverter_ip = config['KostalSection']['inverter_ip']
-        inverter_port = config['KostalSection']['inverter_port']
-
-        byd_ip = config['BydSection']['byd_ip']
-        byd_port = config['BydSection']['byd_port']
-
-        # override with environment variables
-        if os.getenv('IDM_IP','None') != 'None':
-            idm_ip = os.getenv('IDM_IP')
-            print ("using env: IDM_IP")
-        if os.getenv('IDM_PORT','None') != 'None':
-            idm_port = os.getenv('IDM_PORT')
-            print ("using env: IDM_PORT")
-        if os.getenv('FEED_IN_LIMIT','None') != 'None':
-            feed_in_limit = os.getenv('FEED_IN_LIMIT')
-            print ("using env: FEED_IN_LIMIT")
-
-        if os.getenv('CHARGE_START','None') != 'None':
-            charge_start = os.getenv('CHARGE_START')
-            print ("using env: CHARGE_START")
-        if os.getenv('CHARGE_END','None') != 'None':
-            charge_end = os.getenv('CHARGE_END')
-            print ("using env: CHARGE_END")
-        if os.getenv('CHARGE_MQTT_NAME','None') != 'None':
-            charge_mqtt_name = os.getenv('CHARGE_MQTT_NAME')
-            print ("using env: CHARGE_MQTT_NAME")
-        
-        if os.getenv('SERVER_MQTT_NAME','None') != 'None':
-            server_mqtt_name = os.getenv('SERVER_MQTT_NAME')
-            print ("using env: SERVER_MQTT_NAME")
-        
-        if os.getenv('MAXOUTPUT','None') != 'None':
-            maxOutput = os.getenv('MAXOUTPUT')
-            print ("using env: MAXOUTPUT")
-
-        if os.getenv('TIMESCALEDB_IP','None') != 'None':
-            timescaledb_ip = os.getenv('TIMESCALEDB_IP')
-            print ("using env: TIMESCALEDB_IP")
-        if os.getenv('TIMESCALEDB_USERNAME','None') != 'None':
-            timescaledb_username = os.getenv('TIMESCALEDB_USERNAME')
-            print ("using env: TIMESCALEDB_USERNAME")
-        if os.getenv('TIMESCALEDB_PASSWORD','None') != 'None':
-            timescaledb_password = os.getenv('TIMESCALEDB_PASSWORD')
-            print ("using env: TIMESCALEDB_PASSWORD")
-        
-        if os.getenv('MQTT_BROKER','None') != 'None':
-            mqtt_broker = os.getenv('MQTT_BROKER')
-            print ("using env: MQTT_BROKER")
-        if os.getenv('MQTT_PORT','None') != 'None':
-            mqtt_port = os.getenv('MQTT_PORT')
-            print ("using env: MQTT_PORT")
-        if os.getenv('MQTT_USER','None') != 'None':
-            mqtt_user = os.getenv('MQTT_USER')
-            print ("using env: MQTT_USER")
-        if os.getenv('MQTT_PASSWORD','None') != 'None':
-            mqtt_password = os.getenv('MQTT_PASSWORD')
-            print ("using env: MQTT_PASSWORD")
-        
-        if os.getenv('INVERTER_IP','None') != 'None':
-            inverter_ip = os.getenv('INVERTER_IP')
-            print ("using env: INVERTER_IP")
-        if os.getenv('INVERTER_PORT','None') != 'None':
-            inverter_port = os.getenv('INVERTER_PORT')
-            print ("using env: INVERTER_PORT")
-        
-        if os.getenv('BYD_IP','None') != 'None':
-            byd_ip = os.getenv('BYD_IP')
-            print ("using env: BYD_IP")
-        if os.getenv('BYD_PORT','None') != 'None':
-            byd_port = os.getenv('BYD_PORT')
-            print ("using env: BYD_PORT")
-        
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " idm_ip: ", idm_ip)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " idm_port: ", idm_port)     
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " feed_in_limit: ", feed_in_limit)
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charge_start: ", charge_start)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charge_end: ", charge_end)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " charge_mqtt_name: ", charge_mqtt_name) 
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " server_mqtt_name: ", server_mqtt_name) 
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_ip: ", timescaledb_ip)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_username: ", timescaledb_username)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_password: ", timescaledb_password)
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " mqtt_broker: ", mqtt_broker)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " mqtt_port: ", mqtt_port)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " mqtt_user: ", mqtt_user)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " mqtt_password: ", mqtt_password)
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " inverter_ip: ", inverter_ip)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " inverter_port: ", inverter_port)
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " byd_ip: ", byd_ip)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " byd_port: ", byd_port)
+        conf = Config.read()
         
         #connect interfaces
-        TimescaleDb.connect(timescaledb_ip, timescaledb_username, timescaledb_password)
-        Tasmota.connect(mqtt_broker, mqtt_port, mqtt_user, mqtt_password)
+        TimescaleDb.connect(conf["timescaledb_ip"], conf["timescaledb_username"], conf["timescaledb_password"])
+        Tasmota.connect(conf["mqtt_broker"], conf["mqtt_port"], conf["mqtt_user"], conf["mqtt_password"])
 
         #read Kostal
-        kostalvalues = Kostal.read(inverter_ip, inverter_port)
+        kostalvalues = Kostal.read(conf["inverter_ip"], conf["inverter_port"])
         TimescaleDb.write('solar_kostal_consumption_total', kostalvalues["consumption_total"])
         TimescaleDb.write('solar_kostal_inverter', kostalvalues["inverter"])
         TimescaleDb.write('solar_kostal_batteryflag', kostalvalues["batteryflag"])
@@ -240,10 +113,10 @@ if __name__ == "__main__":
         valuesoyosource = TimescaleDb.read('soyosource')
         chargersurplus = surplus - valuesoyosource
 
-        chargerval = charger(charge_mqtt_name, chargersurplus, charge_start, charge_end)
+        chargerval = charger(conf["charge_mqtt_name"], chargersurplus, conf["charge_start"], conf["charge_end"])
         
         # idm
-        idmval = idm(idm_ip, idm_port, kostalvalues["powerToGrid"], feed_in_limit)
+        idmval = idm(conf["idm_ip"], conf["idm_port"], kostalvalues["powerToGrid"], conf["feed_in_limit"])
 
         # soyosource should not use battery during this time
         now = datetime.now()
@@ -252,15 +125,15 @@ if __name__ == "__main__":
 
         #store value for soyosource rs485 script
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " surplus: " + str(surplus))  
-        soyoval = TimescaleDb.increase('soyosource', -surplus, float(maxOutput))
+        soyoval = TimescaleDb.increase('soyosource', -surplus, conf["maxOutput"])
         TimescaleDb.write('solar_soyosource', soyoval)
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " soyoval: " + str(soyoval)) 
 
         print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " consumption: " + str(round(kostalvalues["consumption_total"],2)) + ", generation: " + str(kostalvalues["generation"]) + ", surplus: " + str(kostalvalues["surplus"]) + ", powerToBattery: " + str(kostalvalues["powerToBattery"]) + ", powerToGrid: " + str(kostalvalues["powerToGrid"]) + ", charger: " + chargerval + ", iDM: " + str(idmval) + ", soyosource: " + str(round(soyoval,2)))  
     
         # metrics
-        tasmota(charge_mqtt_name, server_mqtt_name)
-        byd(byd_ip, byd_port)
+        tasmota(conf["charge_mqtt_name"], conf["server_mqtt_name"])
+        byd(conf["byd_ip"], conf["byd_port"])
 
         #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
         

@@ -21,7 +21,7 @@ def read(byd_ip, byd_port):
         
         #connection BYD
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect((byd_ip, int(byd_port)))
+        client.connect((byd_ip, byd_port))
 
         #message 1
         #client.send(bytes.fromhex(MESSAGE_1))

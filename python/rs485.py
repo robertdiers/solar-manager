@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 
-import configparser
-import os
 import serial
 import time
 from datetime import datetime
 
+import Config
 import TimescaleDb
-
-#read config
-config = configparser.ConfigParser()
 
 # Soyosource demand calculation
 def computeDemand(sourceValue, maxOutput, numberOfUnits):
@@ -90,56 +86,14 @@ def RS485(rs485_device, numberOfUnits, maxOutput):
     writeToSerial(simulatedPacket, serialWrite, byte0, byte1, byte2, byte3, byte6)
 
 if __name__ == "__main__":  
-    #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:
-        #read config
-        config.read('solar-manager.ini')
-
-        #read config and default values
-        rs485_device = config['RS485Section']['rs485_device']  
-        numberOfUnits = config['RS485Section']['numberOfUnits']  
-        maxOutput = config['RS485Section']['maxOutput']  
-
-        timescaledb_ip = config['DatabaseSection']['timescaledb_ip']
-        timescaledb_username = config['DatabaseSection']['timescaledb_username']
-        timescaledb_password = config['DatabaseSection']['timescaledb_password']
-
-        # override with environment variables        
-        if os.getenv('RS485_DEVICE','None') != 'None':
-            rs485_device = os.getenv('RS485_DEVICE')
-            print ("using env: RS485_DEVICE")
-        if os.getenv('NUMBEROFUNITS','None') != 'None':
-            numberOfUnits = os.getenv('NUMBEROFUNITS')
-            print ("using env: NUMBEROFUNITS")
-        if os.getenv('MAXOUTPUT','None') != 'None':
-            maxOutput = os.getenv('MAXOUTPUT')
-            print ("using env: MAXOUTPUT")
-
-        if os.getenv('TIMESCALEDB_IP','None') != 'None':
-            timescaledb_ip = os.getenv('TIMESCALEDB_IP')
-            print ("using env: TIMESCALEDB_IP")
-        if os.getenv('TIMESCALEDB_USERNAME','None') != 'None':
-            timescaledb_username = os.getenv('TIMESCALEDB_USERNAME')
-            print ("using env: TIMESCALEDB_USERNAME")
-        if os.getenv('TIMESCALEDB_PASSWORD','None') != 'None':
-            timescaledb_password = os.getenv('TIMESCALEDB_PASSWORD')
-            print ("using env: TIMESCALEDB_PASSWORD")
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " rs485_device: ", rs485_device)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " numberOfUnits: ", numberOfUnits)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " maxOutput: ", maxOutput)   
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_ip: ", timescaledb_ip)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_username: ", timescaledb_username)
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " timescaledb_password: ", timescaledb_password)
+        conf = Config.read()
 
         #connect once every 10 sec and not every 2 sec...
-        TimescaleDb.connect(timescaledb_ip, timescaledb_username, timescaledb_password)
+        TimescaleDb.connect(conf["timescaledb_ip"], conf["timescaledb_username"], conf["timescaledb_password"])
 
         # RS485 Soyosource
-        RS485(rs485_device, float(numberOfUnits), float(maxOutput))
-
-        #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
+        RS485(conf["rs485_device"], conf["numberOfUnits"], conf["maxOutput"])
         
     except Exception as ex:
         print ("ERROR rs485: ", ex) 
