@@ -20,7 +20,11 @@ def writedb(name, json):
         #print(attribute)
         if attribute in json:
             #print(attribute+": "+str(json[attribute]))
-            TimescaleDb.write(name+'_'+attribute, float(json[attribute]))
+            value = float(json[attribute])
+            if attribute in 'Pack_Cell Difference':
+                value = value / 1000.0
+                #print (value)
+            TimescaleDb.write(name+'_'+attribute, value)
 
 if __name__ == "__main__":  
     daly1 = ''
