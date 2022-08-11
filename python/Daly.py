@@ -24,13 +24,16 @@ def flatten_json(y):
     return out
 
 def on_message(client, userdata, message):
-    #print(userdata)
-    content = str(message.payload.decode("utf-8"))
-    #print(content)
-    json_object = flatten_json(json.loads(content))
-    #print(json_object)
-    global internalcallback
-    internalcallback(userdata, json_object)
+    try:
+        #print(userdata)
+        content = str(message.payload.decode("utf-8"))
+        #print(content)
+        json_object = flatten_json(json.loads(content))
+        #print(json_object)
+        global internalcallback
+        internalcallback(userdata, json_object)
+    except Exception as ex:
+        print ("ERROR Daly on_message: ", ex) 
 
 def subscribe(mqtt_broker, mqtt_port, mqtt_user, mqtt_password, topic, callback, name):
     try:
