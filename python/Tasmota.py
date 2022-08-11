@@ -2,7 +2,7 @@
 
 import time
 import json
-import random
+import socket
 from paho.mqtt import client as mqtt_client
 
 client = "unknown"
@@ -86,7 +86,7 @@ def get(name, statusnumber, attributes):
 def connect(mqtt_broker, mqtt_port, mqtt_user, mqtt_password):
     try:
         
-        client_id = 'solarmanager-tasmota-'+str(random.randint(0, 100))
+        client_id = 'solarmanager-tasmota-'+socket.gethostname()
 
         # Set Connecting Client ID
         global client
