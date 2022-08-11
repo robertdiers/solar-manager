@@ -114,7 +114,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_idm_feedin','solar_kostal_consumption_total','solar_kostal_generation_total','solar_kostal_inverter','solar_kostal_powertogrid','solar_kostal_surplus','solar_soyosource','solar_battery_charger_power','solar_byd_power')\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_idm_feedin','solar_kostal_consumption_total','solar_kostal_generation_total','solar_kostal_inverter','solar_kostal_powertogrid','solar_kostal_surplus','solar_soyosource','solar_battery_charger_power','solar_byd_power','Daly1_Pack_Current','Daly2_Pack_Current','Daly3_Pack_Current')\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -242,7 +242,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_soc','solar_byd_soh','solar_byd_error','solar_kostal_batterypercent','solar_kostal_batteryflag','solar_battery_chargestatus')\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_soc','solar_byd_soh','solar_byd_error','solar_kostal_batterypercent','solar_kostal_batteryflag','solar_battery_chargestatus','Daly1_Pack_SOC','Daly2_Pack_SOC','Daly3_Pack_SOC')\nORDER BY 1",
           "refId": "G",
           "select": [
             [
@@ -353,7 +353,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_mintemp','solar_byd_maxtemp','solar_byd_battemp','solar_kostal_dailyyield','solar_battery_charger_today','technical_room_temperature')\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_mintemp','solar_byd_maxtemp','solar_byd_battemp','technical_room_temperature','Daly1_Pack_MaxTemperature','Daly1_Pack_MinTemperature','Daly2_Pack_MaxTemperature','Daly2_Pack_MinTemperature','Daly3_Pack_MaxTemperature','Daly3_Pack_MinTemperature')\nORDER BY 1",
           "refId": "G",
           "select": [
             [
@@ -377,7 +377,7 @@
           ]
         }
       ],
-      "title": "Temperaturen und kWh",
+      "title": "Temperaturen",
       "type": "timeseries"
     },
     {
@@ -441,7 +441,7 @@
         "x": 0,
         "y": 22
       },
-      "id": 6,
+      "id": 9,
       "options": {
         "legend": {
           "calcs": [],
@@ -464,8 +464,8 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_diffvolt','solar_byd_minvolt','solar_byd_maxvolt')\nORDER BY 1",
-          "refId": "D",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_kostal_dailyyield','solar_battery_charger_today','Daly1_Pack_Cycles','Daly2_Pack_Cycles','Daly3_Pack_Cycles')\nORDER BY 1",
+          "refId": "G",
           "select": [
             [
               {
@@ -476,9 +476,9 @@
               }
             ]
           ],
-          "table": "solar_kostal_batterypercent",
+          "table": "solar_battery_chargestatus",
           "timeColumn": "\"time\"",
-          "timeColumnType": "timestamptz",
+          "timeColumnType": "timestamp",
           "where": [
             {
               "name": "$__timeFilter",
@@ -488,7 +488,7 @@
           ]
         }
       ],
-      "title": "Spannungen",
+      "title": "kWh and cycles",
       "type": "timeseries"
     },
     {
@@ -552,7 +552,7 @@
         "x": 12,
         "y": 22
       },
-      "id": 7,
+      "id": 8,
       "options": {
         "legend": {
           "calcs": [],
@@ -574,7 +574,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_diffvolt')\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly1_Pack_Voltage','Daly2_Pack_Voltage','Daly3_Pack_Voltage')\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -598,7 +598,561 @@
           ]
         }
       ],
-      "title": "Spannungen Einzelzellen",
+      "title": "Spannungen Blöcke",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "WsNRUSzVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 2,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_minvolt','solar_byd_maxvolt','Daly1_Pack_High CellV','Daly1_Pack_Low CellV','Daly2_Pack_High CellV','Daly2_Pack_Low CellV','Daly3_Pack_High CellV','Daly3_Pack_Low CellV')\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_kostal_batterypercent",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Spannungen Zellen",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "WsNRUSzVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 2,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('solar_byd_diffvolt','Daly1_Pack_Cell Difference','Daly2_Pack_Cell Difference','Daly3_Pack_Cell Difference')\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_battery_chargestatus",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Differenzspannungen",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "WsNRUSzVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 2,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 38
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly1_CellV_CellV 1','Daly1_CellV_CellV 2','Daly1_CellV_CellV 3','Daly1_CellV_CellV 4','Daly1_CellV_CellV 5','Daly1_CellV_CellV 6','Daly1_CellV_CellV 7','Daly1_CellV_CellV 8','Daly1_CellV_CellV 9','Daly1_CellV_CellV 10','Daly1_CellV_CellV 11','Daly1_CellV_CellV 12','Daly1_CellV_CellV 13','Daly1_CellV_CellV 14','Daly1_CellV_CellV 15','Daly1_CellV_CellV 16')\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_kostal_batterypercent",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Block 1",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "WsNRUSzVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 2,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 38
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly2_CellV_CellV 1','Daly2_CellV_CellV 2','Daly2_CellV_CellV 3','Daly2_CellV_CellV 4','Daly2_CellV_CellV 5','Daly2_CellV_CellV 6','Daly2_CellV_CellV 7','Daly2_CellV_CellV 8','Daly2_CellV_CellV 9','Daly2_CellV_CellV 10','Daly2_CellV_CellV 11','Daly2_CellV_CellV 12','Daly2_CellV_CellV 13','Daly2_CellV_CellV 14','Daly2_CellV_CellV 15','Daly2_CellV_CellV 16')\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_kostal_batterypercent",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Block 2",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "WsNRUSzVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 2,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 46
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "WsNRUSzVz"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly3_CellV_CellV 1','Daly3_CellV_CellV 2','Daly3_CellV_CellV 3','Daly3_CellV_CellV 4','Daly3_CellV_CellV 5','Daly3_CellV_CellV 6','Daly3_CellV_CellV 7','Daly3_CellV_CellV 8','Daly3_CellV_CellV 9','Daly3_CellV_CellV 10','Daly3_CellV_CellV 11','Daly3_CellV_CellV 12','Daly3_CellV_CellV 13','Daly3_CellV_CellV 14','Daly3_CellV_CellV 15','Daly3_CellV_CellV 16')\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "solar_kostal_batterypercent",
+          "timeColumn": "\"time\"",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Block 3",
       "type": "timeseries"
     }
   ],
@@ -610,13 +1164,13 @@
     "list": []
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Robert",
   "uid": "EFixgMmRz",
-  "version": 15,
+  "version": 17,
   "weekStart": ""
 }
