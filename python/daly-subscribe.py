@@ -14,7 +14,7 @@ for x in range(16):
     attributes.append("CellV_CellV "+str(x))
 
 def writedb(name, json):
-    print (json)
+    #print (json)
     global attributes
     for attribute in attributes:
         #print(attribute)
@@ -26,8 +26,8 @@ if __name__ == "__main__":
     daly1 = ''
     daly2 = ''
     daly3 = ''
+    conf = Config.read()
     try:
-        conf = Config.read()
 
         TimescaleDb.connect(conf["timescaledb_ip"], conf["timescaledb_username"], conf["timescaledb_password"])
         
@@ -47,6 +47,6 @@ if __name__ == "__main__":
         print ("ERROR: ", ex) 
     finally:
         TimescaleDb.close()
-        Daly.close(daly1)
-        Daly.close(daly2)
-        Daly.close(daly3)
+        Daly.close(daly1, conf["daly1_mqtt_name"])
+        Daly.close(daly2, conf["daly2_mqtt_name"])
+        Daly.close(daly3, conf["daly3_mqtt_name"])
