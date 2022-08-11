@@ -2,6 +2,7 @@
 
 import time
 import json
+import random
 from paho.mqtt import client as mqtt_client
 
 internalcallback = "unknown"
@@ -34,7 +35,7 @@ def on_message(client, userdata, message):
 def subscribe(mqtt_broker, mqtt_port, mqtt_user, mqtt_password, topic, callback, name):
     try:
         
-        client_id = 'solarmanager-'+name
+        client_id = 'solarmanager-'+name+'-'+str(random.randint(0, 100))
 
         client_userdata = name
 
