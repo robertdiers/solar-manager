@@ -2,6 +2,7 @@
 
 from datetime import datetime
 import time
+import math
 
 import Config
 import Daly
@@ -20,17 +21,21 @@ def writedb(name, json):
         #print(attribute)
         if attribute in json:
             #print(attribute+": "+str(json[attribute]))
-            value = float(json[attribute])
-            if attribute in 'Pack_Cell Difference':
-                value = value / 1000.0
-                #print (value)
-            if attribute in 'Pack_SOC':
-                value = value / 100.0
-                #print (value)
-            if attribute in 'Pack_Current':
-                value = value * float(json['Pack_Voltage'])
-                #print (value)
-            TimescaleDb.write(name+'_'+attribute, value)
+            value = 0
+            if math.isnan(value):
+                print(attribute+" nan: "+str(json[attribute]))
+            else:
+                value = float(json[attribute])
+                if attribute in 'Pack_Cell Difference':
+                    value = value / 1000.0
+                    #print (value)
+                if attribute in 'Pack_SOC':
+                    value = value / 100.0
+                    #print (value)
+                if attribute in 'Pack_Current':
+                    value = value * float(json['Pack_Voltage'])
+                    #print (value)
+                TimescaleDb.write(name+'_'+attribute, value)
 
 if __name__ == "__main__":  
     daly1 = ''
