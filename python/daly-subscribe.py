@@ -27,6 +27,9 @@ def writedb(name, json):
             if attribute in 'Pack_SOC':
                 value = value / 100.0
                 #print (value)
+            if attribute in 'Pack_Current':
+                value = value * float(json['Pack_Voltage'])
+                #print (value)
             TimescaleDb.write(name+'_'+attribute, value)
 
 if __name__ == "__main__":  
