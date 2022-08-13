@@ -68,7 +68,7 @@ def RS485(rs485_device, numberOfUnits, maxOutput):
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 tsdbval: ", tsdbval)
     demand = computeDemand(tsdbval, maxOutput, numberOfUnits)
     #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " RS485 demand: ", demand)
-    TimescaleDb.write('solar_soyosource_inverter', demand)
+    #TimescaleDb.write('solar_soyosource_inverter', demand)
 
     # prepare packet      
     simulatedPacket = createPacket(demand, byte4, byte5, byte7)
