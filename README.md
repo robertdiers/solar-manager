@@ -14,6 +14,7 @@
 ## main Python scripts (startup and cron triggered):
 * init.py - initializes TimescaleDB tables as they are removed when device restarts
 * daly-subscribe.py - subscribes to DALY MQTT output and store to database (https://github.com/softwarecrash/DALY-BMS-to-MQTT)
+* metrics.py - collect metrics and store to database
 * rs485.py - sends "to produce" value to Soyosource inverters using RS485 USB dongle
 * solar-manager.py - business logic
 
