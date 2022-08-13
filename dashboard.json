@@ -906,7 +906,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly1_CellV_CellV 1','Daly1_CellV_CellV 2','Daly1_CellV_CellV 3','Daly1_CellV_CellV 4','Daly1_CellV_CellV 5','Daly1_CellV_CellV 6','Daly1_CellV_CellV 7','Daly1_CellV_CellV 8','Daly1_CellV_CellV 9','Daly1_CellV_CellV 10','Daly1_CellV_CellV 11','Daly1_CellV_CellV 12','Daly1_CellV_CellV 13','Daly1_CellV_CellV 14','Daly1_CellV_CellV 15','Daly1_CellV_CellV 16')\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM voltages\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly1_CellV_CellV 1','Daly1_CellV_CellV 2','Daly1_CellV_CellV 3','Daly1_CellV_CellV 4','Daly1_CellV_CellV 5','Daly1_CellV_CellV 6','Daly1_CellV_CellV 7','Daly1_CellV_CellV 8','Daly1_CellV_CellV 9','Daly1_CellV_CellV 10','Daly1_CellV_CellV 11','Daly1_CellV_CellV 12','Daly1_CellV_CellV 13','Daly1_CellV_CellV 14','Daly1_CellV_CellV 15','Daly1_CellV_CellV 16')\nORDER BY 1",
           "refId": "D",
           "select": [
             [
@@ -1017,7 +1017,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly2_CellV_CellV 1','Daly2_CellV_CellV 2','Daly2_CellV_CellV 3','Daly2_CellV_CellV 4','Daly2_CellV_CellV 5','Daly2_CellV_CellV 6','Daly2_CellV_CellV 7','Daly2_CellV_CellV 8','Daly2_CellV_CellV 9','Daly2_CellV_CellV 10','Daly2_CellV_CellV 11','Daly2_CellV_CellV 12','Daly2_CellV_CellV 13','Daly2_CellV_CellV 14','Daly2_CellV_CellV 15','Daly2_CellV_CellV 16')\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM voltages\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly2_CellV_CellV 1','Daly2_CellV_CellV 2','Daly2_CellV_CellV 3','Daly2_CellV_CellV 4','Daly2_CellV_CellV 5','Daly2_CellV_CellV 6','Daly2_CellV_CellV 7','Daly2_CellV_CellV 8','Daly2_CellV_CellV 9','Daly2_CellV_CellV 10','Daly2_CellV_CellV 11','Daly2_CellV_CellV 12','Daly2_CellV_CellV 13','Daly2_CellV_CellV 14','Daly2_CellV_CellV 15','Daly2_CellV_CellV 16')\nORDER BY 1",
           "refId": "D",
           "select": [
             [
@@ -1128,7 +1128,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM metrics\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly3_CellV_CellV 1','Daly3_CellV_CellV 2','Daly3_CellV_CellV 3','Daly3_CellV_CellV 4','Daly3_CellV_CellV 5','Daly3_CellV_CellV 6','Daly3_CellV_CellV 7','Daly3_CellV_CellV 8','Daly3_CellV_CellV 9','Daly3_CellV_CellV 10','Daly3_CellV_CellV 11','Daly3_CellV_CellV 12','Daly3_CellV_CellV 13','Daly3_CellV_CellV 14','Daly3_CellV_CellV 15','Daly3_CellV_CellV 16')\nORDER BY 1",
+          "rawSql": "SELECT\n  \"time\" AS \"time\",\n  value,\n  key\nFROM voltages\nWHERE\n  $__timeFilter(\"time\") AND\n  key in ('Daly3_CellV_CellV 1','Daly3_CellV_CellV 2','Daly3_CellV_CellV 3','Daly3_CellV_CellV 4','Daly3_CellV_CellV 5','Daly3_CellV_CellV 6','Daly3_CellV_CellV 7','Daly3_CellV_CellV 8','Daly3_CellV_CellV 9','Daly3_CellV_CellV 10','Daly3_CellV_CellV 11','Daly3_CellV_CellV 12','Daly3_CellV_CellV 13','Daly3_CellV_CellV 14','Daly3_CellV_CellV 15','Daly3_CellV_CellV 16')\nORDER BY 1",
           "refId": "D",
           "select": [
             [
@@ -1164,13 +1164,13 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Robert",
   "uid": "EFixgMmRz",
-  "version": 18,
+  "version": 19,
   "weekStart": ""
 }
