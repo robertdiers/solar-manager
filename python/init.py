@@ -10,8 +10,6 @@ if __name__ == "__main__":
         TimescaleDb.connect(conf["timescaledb_ip"], conf["timescaledb_username"], conf["timescaledb_password"])
 
         # execute init script
-        # Using readlines()
-        #file1 = open('adhoc.sql', 'r')
         file1 = open('init.sql', 'r')
         Lines = file1.readlines()
         
