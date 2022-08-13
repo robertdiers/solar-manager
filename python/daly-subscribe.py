@@ -35,9 +35,9 @@ def writedb(name, json):
                 if attribute in 'Pack_Current':
                     value = value * float(json['Pack_Voltage'])
                     #print (value)
-                if attribute in 'CellV_CellV':
+                if attribute.startswith('CellV_CellV'):
                     TimescaleDb.writeV(name+'_'+attribute, value)
-                else
+                else:
                     TimescaleDb.write(name+'_'+attribute, value)
 
 if __name__ == "__main__":  
