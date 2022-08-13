@@ -12,12 +12,14 @@ def tasmota(charge_mqtt_name, server_mqtt_name):
     try:
         result = Tasmota.get(server_mqtt_name, "8", ["StatusSNS_SI7021_Temperature"])
         TimescaleDb.write('technical_room_temperature', result["StatusSNS_SI7021_Temperature"])
-    
+    except Exception as ex:
+        print ("ERROR tasmota "+server_mqtt_name+": ", ex)
+    try:
         result = Tasmota.get(charge_mqtt_name, "8", ["StatusSNS_ENERGY_Power", "StatusSNS_ENERGY_Today"])
         TimescaleDb.write('solar_battery_charger_power', result["StatusSNS_ENERGY_Power"])
         TimescaleDb.write('solar_battery_charger_today', result["StatusSNS_ENERGY_Today"])
     except Exception as ex:
-        print ("ERROR tasmota: ", ex)  
+        print ("ERROR tasmota "+charge_mqtt_name+": ", ex)  
 
 # metrics from BYD
 def byd(byd_ip, byd_port):
