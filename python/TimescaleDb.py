@@ -19,6 +19,19 @@ def write(table, value):
     # close the communication with the PostgreSQL
     cur.close()
 
+# write voltages to TimescaleDB
+def writeV(table, value):
+    global conn  
+    # create a cursor      
+    cur = conn.cursor()   
+    # execute a statement
+    sql = 'insert into voltages (time, key, value) values (now(), %s, %s)'
+    cur.execute(sql, (table,value,))   
+    # commit the changes to the database
+    conn.commit()
+    # close the communication with the PostgreSQL
+    cur.close()
+
 # read from TimescaleDB
 def read(table):
     global conn
