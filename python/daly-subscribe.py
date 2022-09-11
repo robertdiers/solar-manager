@@ -9,7 +9,7 @@ import Daly
 import TimescaleDb
 
 #define interesting attributes        
-attributes = ["Pack_Voltage", "Pack_Current", "Pack_SOC", "Pack_Cycles", "Pack_MinTemperature", "Pack_MaxTemperature", "Pack_High CellV", "Pack_Low CellV", "Pack_Cell Difference", "CellTemp_Temp Sensor 1"]
+attributes = ["Pack_Voltage", "Pack_Current", "Pack_SOC", "Pack_Cycles", "Pack_MinTemperature", "Pack_MaxTemperature", "Pack_High_CellV", "Pack_Low_CellV", "Pack_Cell_Diff", "Pack_Cell_Temp", "Pack_BMS_Temp"]
 #max 48 blocks
 for x in range(48):
     attributes.append("CellV_CellV "+str(x))
@@ -26,7 +26,7 @@ def writedb(name, json):
                 print(attribute+" nan: "+str(json[attribute]))
             else:
                 value = float(json[attribute])
-                if attribute in 'Pack_Cell Difference':
+                if attribute in 'Pack_Cell_Diff':
                     value = value / 1000.0
                     #print (value)
                 if attribute in 'Pack_SOC':
