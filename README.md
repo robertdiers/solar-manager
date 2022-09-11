@@ -4,7 +4,7 @@
 * Kostal inverter with BYD storage
 * Kostal energy meter
 * iDM Heat Pump AERO SLM 6-17 with "solar input" feature
-* additional 48V battery block
+* additional 48V battery block with Daly BMS (3 blocks in parallel)
 * Tasmota device to manage a 48V charger (Sonoff POWR3)
 * 3 SoyoSource GTN 1200 (Grid Tie inverter)
 * USB to RS485 dongle to manage the SoyoSource output
