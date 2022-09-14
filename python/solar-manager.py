@@ -86,7 +86,11 @@ if __name__ == "__main__":
         chargerval = charger(conf["charge_mqtt_name"], chargersurplus, conf["charge_start"], conf["charge_end"])
         
         # idm
-        idmval = idm(conf["idm_ip"], conf["idm_port"], kostalvalues["powerToGrid"], conf["feed_in_limit"])
+        idmsurplus = 0
+        if valuesoyosource < 1:
+            idmsurplus = kostalvalues["powerToGrid"]
+            #print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " idmsurplus: " + str(idmsurplus))  
+        idmval = idm(conf["idm_ip"], conf["idm_port"], idmsurplus, conf["feed_in_limit"])
 
         # soyosource should not use battery during this time
         now = datetime.now()
