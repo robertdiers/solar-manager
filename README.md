@@ -8,7 +8,7 @@
 * Tasmota device to manage a 48V charger (Sonoff POWR3)
 * 3 SoyoSource GTN 1200 (Grid Tie inverter)
 * USB to RS485 dongle to manage the SoyoSource output
-* Orange Pi 3 LTS to run the containers and USB dongle
+* Device to run the containers and USB dongle (1GB RAM should be fine)
 * Tasmota device to manage Orange Pi power including temperature sensor (Sonoff TH16 + Si7021)
 
 ## main Python scripts (startup and cron triggered):
@@ -29,7 +29,7 @@
 
 ## Docker
 ```
-docker run -d --restart always --device=/dev/ttyUSB0:/dev/ttyUSB0 --name solarmanager robertdiers/solarmanager:arm64
+docker run -d --restart always --device=/dev/ttyUSB0:/dev/ttyUSB0 --name solarmanager robertdiers/solarmanager:x64
 ```
 
 ### TimescaleDB
