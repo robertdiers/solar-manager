@@ -54,11 +54,11 @@ if __name__ == "__main__":
         daly2 = Daly.subscribe(conf["mqtt_broker"], conf["mqtt_port"], conf["mqtt_user"], conf["mqtt_password"], conf["daly2_mqtt_name"], writedb, "Daly2")
         daly3 = Daly.subscribe(conf["mqtt_broker"], conf["mqtt_port"], conf["mqtt_user"], conf["mqtt_password"], conf["daly3_mqtt_name"], writedb, "Daly3")
 
-        #run open end
-        waitflag = 'true'
-        while (waitflag):
+        #run 10 minutes
+        minutes = 0
+        while (minutes < 10):
             time.sleep(60)
-            waitflag = 'true'
+            minutes = minutes + 1
             #print ("waiting")
 
     except Exception as ex:

@@ -6,3 +6,4 @@
 * * * * * sleep 30; . $HOME/.profile; /app/rs485.sh > /proc/1/fd/1 2>/proc/1/fd/2
 * * * * * sleep 40; . $HOME/.profile; /app/rs485.sh > /proc/1/fd/1 2>/proc/1/fd/2
 * * * * * sleep 50; . $HOME/.profile; /app/rs485.sh > /proc/1/fd/1 2>/proc/1/fd/2
+*/10 * * * * . $HOME/.profile; /app/daly-subscribe.sh > /proc/1/fd/1 2>/proc/1/fd/2

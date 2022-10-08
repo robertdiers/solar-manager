@@ -10,6 +10,7 @@ RUN pip3 install configparser pymodbus psycopg2 paho-mqtt
 COPY python /app/python
 COPY shell/rs485.sh /app/rs485.sh
 COPY shell/metrics.sh /app/metrics.sh
+COPY shell/daly-subscribe.sh /app/daly-subscribe.sh
 COPY shell/solar-manager.sh /app/solar-manager.sh
 COPY shell/entrypoint.sh /app/entrypoint.sh
 COPY shell/container_cron /etc/cron.d/container_cron
