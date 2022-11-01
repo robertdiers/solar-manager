@@ -29,7 +29,7 @@
 
 ## Docker
 ```
-docker run -d --restart always --device=/dev/ttyUSB0:/dev/ttyUSB0 --name solarmanager robertdiers/solarmanager:x64
+docker run -d --restart always --device=/dev/ttyUSB0:/dev/ttyUSB0 --name solarmanager robertdiers/solarmanager
 ```
 
 ### TimescaleDB

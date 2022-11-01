@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import pymodbus
-from pymodbus.client.sync import ModbusTcpClient
+from pymodbus.client import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.payload import BinaryPayloadBuilder
@@ -9,7 +9,7 @@ from pymodbus.payload import BinaryPayloadBuilder
 #-----------------------------------------
 # Routine to read a float    
 def readfloat(client,myadr_dec,unitid):
-    r1=client.read_holding_registers(myadr_dec,2,unit=unitid)
+    r1=client.read_holding_registers(myadr_dec,2,slave=unitid)
     FloatRegister = BinaryPayloadDecoder.fromRegisters(r1.registers, byteorder=Endian.Big, wordorder=Endian.Little)
     result_FloatRegister =round(FloatRegister.decode_32bit_float(),2)
     return(result_FloatRegister)   
@@ -20,7 +20,7 @@ def writefloat(client,myadr_dec,feed_in,unitid):
     builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Little)
     builder.add_32bit_float( feed_in )
     payload = builder.to_registers() 
-    client.write_registers(myadr_dec, payload, unit=unitid)
+    client.write_registers(myadr_dec, payload, slave=unitid)
 
 def writeandread(idm_ip, idm_port, feed_in):  
     try:
