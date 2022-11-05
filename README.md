@@ -9,7 +9,7 @@
 * 3 SoyoSource GTN 1200 (Grid Tie inverter)
 * USB to RS485 dongle to manage the SoyoSource output
 * Device to run the containers and USB dongle (1GB RAM should be fine)
-* Tasmota device to manage Orange Pi power including temperature sensor (Sonoff TH16 + Si7021)
+* Tasmota device to manage device power including temperature sensor (Sonoff TH16 + Si7021)
 
 ## main Python scripts (startup and cron triggered):
 * init.py - initializes TimescaleDB tables as they are removed when device restarts
