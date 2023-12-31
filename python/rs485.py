@@ -46,7 +46,6 @@ def writeToSerial(packet, serialWrite, byte0, byte1, byte2, byte3, byte6):
         print ("ERROR writeToSerial: ", ex)
     return packet
 
-# idm heat pump
 def RS485(rs485_device, numberOfUnits, maxOutput):
     actualsec = datetime.now().strftime("%S")
     #print ('###' + actualsec)
